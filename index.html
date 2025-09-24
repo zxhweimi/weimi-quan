@@ -13,17 +13,23 @@
         <!-- 左侧：吸引男性的图表和美女展示区域 -->
         <div class="left-panel">
             <div class="header">
-                <h1 class="title">魅力数据展示</h1>
+                <h1 class="title">秘语，微密圈，百位网红主播</h1>
                 <p class="subtitle">实时魅力指数分析</p>
             </div>
             
             <!-- 美女展示区域 -->
             <div class="beauty-showcase">
                 <div class="beauty-card">
-                    <div class="beauty-image">
-                        <div class="image-placeholder">
-                            <i class="fas fa-heart"></i>
-                            <p>魅力展示</p>
+                    <div class="beauty-gallery">
+                        <div class="gallery-main">
+                            <img src="beauty-1.jpg" alt="魅力展示" class="beauty-img main-img">
+                        </div>
+                        <div class="gallery-thumbnails">
+                            <img src="beauty-1.jpg" alt="图片1" class="thumbnail active" data-index="0">
+                            <img src="beauty-2.jpg" alt="图片2" class="thumbnail" data-index="1">
+                            <img src="beauty-3.jpg" alt="图片3" class="thumbnail" data-index="2">
+                            <img src="beauty-4.jpg" alt="图片4" class="thumbnail" data-index="3">
+                            <img src="beauty-5.jpg" alt="图片5" class="thumbnail" data-index="4">
                         </div>
                     </div>
                     <div class="beauty-info">
@@ -98,14 +104,17 @@
                         <h3>收款二维码</h3>
                         <p class="amount">金额：¥<span id="amount">0.00</span></p>
                         <div class="payment-options">
-                            <button class="amount-btn" data-amount="10">¥10</button>
-                            <button class="amount-btn" data-amount="20">¥20</button>
-                            <button class="amount-btn" data-amount="50">¥50</button>
-                            <button class="amount-btn" data-amount="100">¥100</button>
+                            <button class="amount-btn" data-amount="10">¥10（任选一人）</button>
+                            <button class="amount-btn" data-amount="20">¥20（任选三人）</button>
+                            <button class="amount-btn" data-amount="50">¥50（任选7人）</button>
+                            <button class="amount-btn" data-amount="100">¥100（全套打包）</button>
                         </div>
-                        <div class="custom-amount">
-                            <input type="number" id="customAmount" placeholder="自定义金额" min="0.01" step="0.01">
-                            <button id="setCustomAmount" class="custom-btn">设置金额</button>
+                        
+                        
+                        <div class="qq-service">
+                            <h4>QQ客服</h4>
+                            <p>支付完成功添加QQ客服：<span class="qq-number">3472132884</span><br><small class="backup-qq">备用QQ1837909217</small><br>支付完成后，备注您的心意女生，自动发送您的套餐</p>
+                            <button class="qq-btn" onclick="copyQQ()">复制QQ号</button>
                         </div>
                     </div>
                 </div>
@@ -117,7 +126,7 @@
                     </div>
                 </div>
             </div>
-            
+        
             <div class="payment-tips">
                 <h4>支付说明</h4>
                 <ul>
