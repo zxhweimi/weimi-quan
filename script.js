@@ -513,6 +513,105 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// 复制QQ号功能
+function copyQQ() {
+    const qqNumber = '1837909217';
+    
+    // 尝试使用现代API复制到剪贴板
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(qqNumber).then(() => {
+            showCopySuccess('QQ号已复制到剪贴板！');
+        }).catch(() => {
+            fallbackCopy(qqNumber);
+        });
+    } else {
+        fallbackCopy(qqNumber);
+    }
+}
+
+// 备用复制方法
+function fallbackCopy(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showCopySuccess('QQ号已复制到剪贴板！');
+    } catch (err) {
+        showCopyError('复制失败，请手动复制：' + text);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+// 显示复制成功提示
+function showCopySuccess(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'copy-success';
+    successDiv.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 3000;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            animation: slideIn 0.3s ease-out;
+        ">
+            ✅ ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    setTimeout(() => {
+        if (successDiv.parentNode) {
+            successDiv.parentNode.removeChild(successDiv);
+        }
+    }, 3000);
+}
+
+// 显示复制失败提示
+function showCopyError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'copy-error';
+    errorDiv.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 3000;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+            animation: slideIn 0.3s ease-out;
+        ">
+            ❌ ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(errorDiv);
+    
+    setTimeout(() => {
+        if (errorDiv.parentNode) {
+            errorDiv.parentNode.removeChild(errorDiv);
+        }
+    }, 5000);
+}
+
 // 初始化额外功能
 document.addEventListener('DOMContentLoaded', addExtraFeatures);
 
