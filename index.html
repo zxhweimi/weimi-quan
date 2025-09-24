@@ -110,6 +110,18 @@
                             <button class="amount-btn" data-amount="100">¥100（全套打包）</button>
                         </div>
                         
+                        <div class="order-section" id="orderSection" style="display: none;">
+                            <div class="order-info">
+                                <h4>订单信息</h4>
+                                <p>金额：¥<span id="orderAmount">0.00</span></p>
+                                <p>套餐：<span id="orderPackage">请选择套餐</span></p>
+                            </div>
+                            <button class="order-btn" id="orderBtn" onclick="createOrder()">
+                                <i class="fas fa-shopping-cart"></i>
+                                去下单
+                            </button>
+                        </div>
+                        
                         
                         <div class="qq-service">
                             <h4>QQ客服</h4>

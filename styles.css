@@ -400,6 +400,11 @@ body {
     }
 }
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .payment-tips {
     background: white;
     border-radius: 8px;
@@ -501,6 +506,64 @@ body {
 
 .qq-btn:active {
     transform: translateY(0);
+}
+
+/* 订单区域样式 */
+.order-section {
+    background: #ffeef0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 2px solid #ffb6c1;
+    box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+}
+
+.order-info {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.order-info h4 {
+    color: #d63384;
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.order-info p {
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.order-btn {
+    background: linear-gradient(135deg, #e91e63 0%, #d63384 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 200px;
+}
+
+.order-btn:hover {
+    background: linear-gradient(135deg, #d63384 0%, #c2185b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
+}
+
+.order-btn:active {
+    transform: translateY(0);
+}
+
+.order-btn i {
+    margin-right: 0.5rem;
 }
 
 /* 响应式设计 */

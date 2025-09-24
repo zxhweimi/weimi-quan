@@ -123,6 +123,9 @@ function initPaymentFeatures() {
             amountButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
+            // 显示订单区域
+            showOrderSection(amount, this.textContent);
+            
             // 更新支付状态和二维码
             updatePaymentStatus('准备支付');
             updateQRCode(amount);
@@ -658,6 +661,184 @@ function showCopyError(message) {
             errorDiv.parentNode.removeChild(errorDiv);
         }
     }, 5000);
+}
+
+// 显示订单区域
+function showOrderSection(amount, packageText) {
+    const orderSection = document.getElementById('orderSection');
+    const orderAmount = document.getElementById('orderAmount');
+    const orderPackage = document.getElementById('orderPackage');
+    
+    if (orderSection && orderAmount && orderPackage) {
+        orderAmount.textContent = amount + '.00';
+        orderPackage.textContent = packageText;
+        orderSection.style.display = 'block';
+        
+        // 添加显示动画
+        orderSection.style.opacity = '0';
+        orderSection.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            orderSection.style.transition = 'all 0.3s ease';
+            orderSection.style.opacity = '1';
+            orderSection.style.transform = 'translateY(0)';
+        }, 100);
+    }
+}
+
+// 创建订单功能
+function createOrder() {
+    const orderAmount = document.getElementById('orderAmount').textContent;
+    const orderPackage = document.getElementById('orderPackage').textContent;
+    
+    // 显示订单确认
+    showOrderConfirmation(orderAmount, orderPackage);
+    
+    // 模拟创建订单过程
+    showOrderStatus('正在创建订单...');
+    
+    setTimeout(() => {
+        showOrderStatus('订单创建成功！');
+        
+        // 模拟跳转到微信支付
+        setTimeout(() => {
+            showWechatPayRedirect();
+        }, 1500);
+    }, 2000);
+}
+
+// 显示订单确认
+function showOrderConfirmation(amount, packageText) {
+    const confirmation = document.createElement('div');
+    confirmation.className = 'order-confirmation';
+    confirmation.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 12px;
+            z-index: 3000;
+            font-weight: 500;
+            text-align: center;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #e91e63;
+        ">
+            <div style="margin-bottom: 1rem; font-size: 1.2rem; color: #e91e63;">🛒 订单确认</div>
+            <div style="margin-bottom: 1rem;">
+                <strong>金额：</strong>¥${amount}<br>
+                <strong>套餐：</strong>${packageText}
+            </div>
+            <div style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                点击确认后将跳转到微信支付
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+                background: #e91e63;
+                color: white;
+                border: none;
+                padding: 0.8rem 1.5rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+                margin-right: 0.5rem;
+            ">确认下单</button>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+                background: #ccc;
+                color: white;
+                border: none;
+                padding: 0.8rem 1.5rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+            ">取消</button>
+        </div>
+    `;
+    
+    document.body.appendChild(confirmation);
+}
+
+// 显示订单状态
+function showOrderStatus(message) {
+    const statusDiv = document.createElement('div');
+    statusDiv.className = 'order-status';
+    statusDiv.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e91e63;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 2000;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            animation: slideIn 0.3s ease-out;
+        ">
+            🛒 ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(statusDiv);
+    
+    setTimeout(() => {
+        if (statusDiv.parentNode) {
+            statusDiv.parentNode.removeChild(statusDiv);
+        }
+    }, 3000);
+}
+
+// 显示微信支付跳转
+function showWechatPayRedirect() {
+    const redirectDiv = document.createElement('div');
+    redirectDiv.className = 'wechat-pay-redirect';
+    redirectDiv.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 12px;
+            z-index: 3000;
+            font-weight: 500;
+            text-align: center;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #07c160;
+        ">
+            <div style="margin-bottom: 1rem; font-size: 1.2rem; color: #07c160;">💳 微信支付</div>
+            <div style="margin-bottom: 1rem;">
+                正在跳转到微信支付...
+            </div>
+            <div style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                请使用微信扫描二维码完成支付
+            </div>
+            <div style="
+                width: 40px;
+                height: 40px;
+                border: 3px solid #07c160;
+                border-top: 3px solid transparent;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto;
+            "></div>
+        </div>
+    `;
+    
+    document.body.appendChild(redirectDiv);
+    
+    // 3秒后自动关闭
+    setTimeout(() => {
+        if (redirectDiv.parentNode) {
+            redirectDiv.parentNode.removeChild(redirectDiv);
+        }
+    }, 3000);
 }
 
 // 初始化额外功能
