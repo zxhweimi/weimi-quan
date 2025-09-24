@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魅力展示与支付平台</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧：吸引男性的图表和美女展示区域 -->
+        <div class="left-panel">
+            <div class="header">
+                <h1 class="title">魅力数据展示</h1>
+                <p class="subtitle">实时魅力指数分析</p>
+            </div>
+            
+            <!-- 美女展示区域 -->
+            <div class="beauty-showcase">
+                <div class="beauty-card">
+                    <div class="beauty-image">
+                        <div class="image-placeholder">
+                            <i class="fas fa-heart"></i>
+                            <p>魅力展示</p>
+                        </div>
+                    </div>
+                    <div class="beauty-info">
+                        <h3>魅力指数</h3>
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="score">9.8/10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据图表区域 -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h3>魅力趋势分析</h3>
+                    <div class="chart">
+                        <canvas id="attractionChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>关注度</h4>
+                            <p class="stat-number">1,234</p>
+                            <span class="stat-change positive">+12%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>喜爱度</h4>
+                            <p class="stat-number">856</p>
+                            <span class="stat-change positive">+8%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>互动率</h4>
+                            <p class="stat-number">92%</p>
+                            <span class="stat-change positive">+5%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧：微信收付款二维码区域 -->
+        <div class="right-panel">
+            <div class="payment-header">
+                <h2>微信支付</h2>
+                <p>扫码完成支付</p>
+            </div>
+            
+            <div class="qr-section">
+                <div class="qr-container">
+                    <div class="qr-code">
+                        <img src="wechat-qr.png" alt="微信支付二维码" class="qr-image">
+                    </div>
+                    <div class="qr-info">
+                        <h3>收款二维码</h3>
+                        <p class="amount">金额：¥<span id="amount">0.00</span></p>
+                        <div class="payment-options">
+                            <button class="amount-btn" data-amount="10">¥10</button>
+                            <button class="amount-btn" data-amount="20">¥20</button>
+                            <button class="amount-btn" data-amount="50">¥50</button>
+                            <button class="amount-btn" data-amount="100">¥100</button>
+                        </div>
+                        <div class="custom-amount">
+                            <input type="number" id="customAmount" placeholder="自定义金额" min="0.01" step="0.01">
+                            <button id="setCustomAmount" class="custom-btn">设置金额</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="payment-status">
+                    <div class="status-indicator">
+                        <i class="fas fa-circle"></i>
+                        <span>等待支付</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-tips">
+                <h4>支付说明</h4>
+                <ul>
+                    <li>请使用微信扫描二维码</li>
+                    <li>确认金额后完成支付</li>
+                    <li>支付成功后会自动跳转</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
