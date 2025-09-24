@@ -1,0 +1,460 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #ffeef0;
+    min-height: 100vh;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 2px 10px rgba(255, 182, 193, 0.3);
+}
+
+/* 左侧面板样式 */
+.left-panel {
+    flex: 1;
+    background: #fff0f5;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ffb6c1;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #d63384;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #e91e63;
+    font-weight: 400;
+}
+
+/* 美女展示区域 */
+.beauty-showcase {
+    margin-bottom: 2rem;
+}
+
+.beauty-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+    border: 1px solid #ffb6c1;
+}
+
+.beauty-image {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.image-placeholder {
+    width: 150px;
+    height: 150px;
+    background: #ffeef0;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: #e91e63;
+    font-size: 2rem;
+    border: 2px dashed #ffb6c1;
+}
+
+.image-placeholder p {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-weight: 400;
+}
+
+.beauty-info h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stars {
+    color: #ff69b4;
+    font-size: 1.2rem;
+}
+
+.score {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #d63384;
+}
+
+/* 图表区域 */
+.charts-section {
+    flex: 1;
+}
+
+.chart-container {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+    border: 1px solid #ffb6c1;
+}
+
+.chart-container h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.chart {
+    height: 200px;
+    position: relative;
+}
+
+/* 统计卡片网格 */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+    border: 1px solid #ffb6c1;
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+    color: #e91e63;
+    margin-bottom: 0.5rem;
+}
+
+.stat-content h4 {
+    color: #666;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.stat-number {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.stat-change {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.stat-change.positive {
+    background: #e8f5e8;
+    color: #4caf50;
+}
+
+/* 右侧面板样式 */
+.right-panel {
+    flex: 1;
+    background: #fff0f5;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.payment-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #d63384;
+    margin-bottom: 0.5rem;
+}
+
+.payment-header p {
+    font-size: 1rem;
+    color: #e91e63;
+    font-weight: 400;
+}
+
+/* 二维码区域 */
+.qr-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.qr-container {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+    border: 1px solid #ffb6c1;
+    margin-bottom: 1.5rem;
+}
+
+.qr-code {
+    margin-bottom: 1.5rem;
+}
+
+.qr-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+    border: 2px solid #ffb6c1;
+    object-fit: cover;
+}
+
+.qr-info h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #d63384;
+    margin-bottom: 1.5rem;
+}
+
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.amount-btn {
+    background: #e91e63;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(233, 30, 99, 0.3);
+}
+
+.amount-btn:hover {
+    background: #d63384;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+}
+
+.amount-btn:active {
+    transform: translateY(0);
+}
+
+.custom-amount {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+#customAmount {
+    flex: 1;
+    padding: 0.8rem;
+    border: 2px solid #ffb6c1;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#customAmount:focus {
+    border-color: #e91e63;
+}
+
+.custom-btn {
+    background: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 105, 180, 0.3);
+}
+
+.custom-btn:hover {
+    background: #e91e63;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+}
+
+.payment-status {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    color: #333;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.status-indicator i {
+    color: #ffa726;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.payment-tips {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+    border: 1px solid #ffb6c1;
+}
+
+.payment-tips h4 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.payment-tips ul {
+    list-style: none;
+    color: #666;
+}
+
+.payment-tips li {
+    padding: 0.3rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.payment-tips li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #e91e63;
+    font-weight: bold;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .left-panel,
+    .right-panel {
+        padding: 1.5rem;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .payment-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .payment-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .left-panel,
+    .right-panel {
+        padding: 1rem;
+    }
+    
+    .title {
+        font-size: 1.8rem;
+    }
+    
+    .payment-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .payment-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .image-placeholder,
+    .qr-placeholder {
+        width: 150px;
+        height: 150px;
+        font-size: 2rem;
+    }
+}
