@@ -110,17 +110,6 @@
                             <button class="amount-btn" data-amount="100">¥100（全套打包）</button>
                         </div>
                         
-                        <div class="order-section" id="orderSection" style="display: none;">
-                            <div class="order-info">
-                                <h4>订单信息</h4>
-                                <p>金额：¥<span id="orderAmount">0.00</span></p>
-                                <p>套餐：<span id="orderPackage">请选择套餐</span></p>
-                            </div>
-                            <button class="order-btn" id="orderBtn" onclick="createOrder()">
-                                <i class="fas fa-shopping-cart"></i>
-                                去下单
-                            </button>
-                        </div>
                         
                         
                         <div class="qq-service">
@@ -147,6 +136,17 @@
                     <li>支付成功后会自动跳转</li>
                 </ul>
             </div>
+        </div>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <h3>微信支付</h3>
+            <img class="popup-qr" id="popupQR" src="wechat-qr.png" alt="微信支付二维码">
+            <div class="popup-amount" id="popupAmount">¥0.00</div>
+            <div class="popup-hint">截图进入微信扫码支付</div>
+            <button class="popup-close" onclick="closePopup()">关闭</button>
         </div>
     </div>
 

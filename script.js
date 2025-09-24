@@ -123,12 +123,8 @@ function initPaymentFeatures() {
             amountButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
-            // 显示订单区域
-            showOrderSection(amount, this.textContent);
-            
-            // 更新支付状态和二维码
-            updatePaymentStatus('准备支付');
-            updateQRCode(amount);
+            // 直接弹出二维码
+            showQRPopup(amount);
         });
     });
     
@@ -141,9 +137,8 @@ function initPaymentFeatures() {
             // 清除所有按钮的激活状态
             amountButtons.forEach(btn => btn.classList.remove('active'));
             
-            // 更新支付状态和二维码
-            updatePaymentStatus('准备支付');
-            updateQRCode(customAmount);
+            // 直接弹出二维码
+            showQRPopup(customAmount);
         }
     });
     
@@ -876,4 +871,45 @@ if ('ontouchstart' in window) {
             e.target.style.transform = '';
         }
     });
+}
+
+// 显示二维码弹窗
+function showQRPopup(amount) {
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupQR = document.getElementById('popupQR');
+    const popupAmount = document.getElementById('popupAmount');
+    
+    // 设置金额
+    popupAmount.textContent = '¥' + amount + '.00';
+    
+    // 根据金额选择对应的二维码
+    let qrSrc = 'wechat-qr.png'; // 默认二维码
+    if (amount == 10) {
+        qrSrc = 'wechat-qr-10.png';
+    } else if (amount == 20) {
+        qrSrc = 'wechat-qr-20.png';
+    } else if (amount == 50) {
+        qrSrc = 'wechat-qr-50.png';
+    } else if (amount == 100) {
+        qrSrc = 'wechat-qr-100.png';
+    }
+    
+    // 更新二维码图片
+    popupQR.src = qrSrc;
+    
+    // 显示弹窗
+    popupOverlay.classList.add('show');
+    
+    // 点击背景关闭弹窗
+    popupOverlay.addEventListener('click', function(e) {
+        if (e.target === popupOverlay) {
+            closePopup();
+        }
+    });
+}
+
+// 关闭弹窗
+function closePopup() {
+    const popupOverlay = document.getElementById('popupOverlay');
+    popupOverlay.classList.remove('show');
 }
