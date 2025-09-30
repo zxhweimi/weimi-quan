@@ -2,6 +2,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM加载完成，开始初始化');
     
+    // 确保删除任何可能存在的测试按钮
+    const existingTestBtn = document.querySelector('button[style*="position: fixed"][style*="top: 10px"][style*="left: 10px"]');
+    if (existingTestBtn) {
+        existingTestBtn.remove();
+        console.log('已删除现有的测试按钮');
+    }
+    
     // 图表功能已移除，改为用户反馈滚轮
     
     // 初始化支付功能
