@@ -43,30 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
     
-    // 添加测试按钮（临时）
-    setTimeout(() => {
-        const testBtn = document.createElement('button');
-        testBtn.textContent = '重新生成评价';
-        testBtn.style.cssText = `
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 10000;
-            background: #e91e63;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        `;
-        testBtn.onclick = () => {
-            console.log('手动触发评价生成');
-            initHistoricalFeedback();
-            initTodayFeedback();
-        };
-        document.body.appendChild(testBtn);
-    }, 1000);
     
     // 测试按钮点击
     console.log('测试按钮点击事件');
