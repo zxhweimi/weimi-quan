@@ -597,6 +597,11 @@ body::before {
     box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 80px;
 }
 
 .amount-btn::before {
@@ -618,7 +623,11 @@ body::before {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 4px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
 }
 
 .price {
@@ -643,7 +652,6 @@ body::before {
 .amount-btn.popular {
     background: linear-gradient(135deg, #ff6b9d, #e91e63);
     box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
-    transform: scale(1.05);
 }
 
 .amount-btn.best-value {
@@ -2012,14 +2020,32 @@ body::before {
     .amount-btn {
         padding: 1rem 0.5rem;
         min-height: 80px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .amount-btn .price {
         font-size: 1.2rem;
+        line-height: 1.2;
+        margin-bottom: 0.2rem;
     }
     
     .amount-btn .desc {
         font-size: 0.9rem;
+        line-height: 1.1;
+    }
+    
+    .amount-btn .tag {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.4rem;
+        margin: 0.2rem 0;
+    }
+    
+    .amount-btn .urgency {
+        font-size: 0.8rem;
+        margin-top: 0.2rem;
     }
     
     .qr-section {
@@ -2129,24 +2155,36 @@ body::before {
     .amount-btn {
         padding: 0.8rem 0.5rem;
         min-height: 70px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .amount-btn .price {
         font-size: 1.1rem;
         line-height: 1.2;
+        margin-bottom: 0.2rem;
+        text-align: center;
     }
     
     .amount-btn .desc {
         font-size: 0.8rem;
+        line-height: 1.1;
+        text-align: center;
     }
     
     .amount-btn .tag {
         font-size: 0.7rem;
         padding: 0.2rem 0.4rem;
+        margin: 0.2rem 0;
+        text-align: center;
     }
     
     .amount-btn .urgency {
         font-size: 0.7rem;
+        margin-top: 0.2rem;
+        text-align: center;
     }
     
     .qr-image {
@@ -2345,12 +2383,31 @@ body::before {
         font-size: 1.2rem;
     }
     
+    .amount-btn {
+        min-height: 65px;
+        padding: 0.7rem 0.4rem;
+    }
+    
     .amount-btn .price {
         font-size: 1rem;
+        line-height: 1.2;
+        margin-bottom: 0.1rem;
     }
     
     .amount-btn .desc {
         font-size: 0.75rem;
+        line-height: 1.1;
+    }
+    
+    .amount-btn .tag {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.3rem;
+        margin: 0.1rem 0;
+    }
+    
+    .amount-btn .urgency {
+        font-size: 0.65rem;
+        margin-top: 0.1rem;
     }
     
     .qr-image {
