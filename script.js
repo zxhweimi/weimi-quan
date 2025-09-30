@@ -1,13 +1,85 @@
 // 等待DOM加载完成
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化图表
-    initAttractionChart();
+    console.log('DOM加载完成，开始初始化');
+    
+    // 图表功能已移除，改为用户反馈滚轮
     
     // 初始化支付功能
     initPaymentFeatures();
     
     // 添加动画效果
     addAnimations();
+    
+    // 初始化营销功能
+    initMarketingFeatures();
+    
+    // 直接启动倒计时
+    startCountdown();
+    
+    // 初始化用户反馈滚轮
+    initFeedbackCarousel();
+    
+    // 立即初始化历史评价和今日评价
+    console.log('立即初始化历史评价...');
+    initHistoricalFeedback();
+    
+    console.log('立即初始化今日评价...');
+    initTodayFeedback();
+    
+    // 快速检查，确保一定会执行
+    setTimeout(() => {
+        console.log('快速检查历史评价...');
+        const historicalTrack = document.getElementById('historicalTrack');
+        if (historicalTrack && historicalTrack.children.length < 10) {
+            console.log('检测到历史评价数量不足，强制重新生成');
+            initHistoricalFeedback();
+        }
+        
+        console.log('快速检查今日评价...');
+        const todayTrack = document.getElementById('todayTrack');
+        if (todayTrack && todayTrack.children.length < 10) {
+            console.log('检测到今日评价数量不足，强制重新生成');
+            initTodayFeedback();
+        }
+    }, 500);
+    
+    // 添加测试按钮（临时）
+    setTimeout(() => {
+        const testBtn = document.createElement('button');
+        testBtn.textContent = '重新生成评价';
+        testBtn.style.cssText = `
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 10000;
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        `;
+        testBtn.onclick = () => {
+            console.log('手动触发评价生成');
+            initHistoricalFeedback();
+            initTodayFeedback();
+        };
+        document.body.appendChild(testBtn);
+    }, 1000);
+    
+    // 测试按钮点击
+    console.log('测试按钮点击事件');
+    const welcomeBtn = document.querySelector('.welcome-btn');
+    if (welcomeBtn) {
+        console.log('找到欢迎按钮');
+        welcomeBtn.addEventListener('click', function() {
+            console.log('按钮被点击');
+            closeWelcome();
+        });
+    } else {
+        console.log('未找到欢迎按钮');
+    }
 });
 
 // 初始化吸引力图表
@@ -123,33 +195,35 @@ function initPaymentFeatures() {
             amountButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
-            // 更新支付状态和二维码
-            updatePaymentStatus('准备支付');
-            updateQRCode(amount);
+            // 直接弹出二维码
+            showQRPopup(amount);
         });
     });
     
     // 自定义金额设置
-    setCustomAmountBtn.addEventListener('click', function() {
-        const customAmount = parseFloat(customAmountInput.value);
-        if (customAmount && customAmount > 0) {
-            amountDisplay.textContent = customAmount.toFixed(2);
-            
-            // 清除所有按钮的激活状态
-            amountButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // 更新支付状态和二维码
-            updatePaymentStatus('准备支付');
-            updateQRCode(customAmount);
-        }
-    });
+    if (setCustomAmountBtn) {
+        setCustomAmountBtn.addEventListener('click', function() {
+            const customAmount = parseFloat(customAmountInput.value);
+            if (customAmount && customAmount > 0) {
+                amountDisplay.textContent = customAmount.toFixed(2);
+                
+                // 清除所有按钮的激活状态
+                amountButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // 直接弹出二维码
+                showQRPopup(customAmount);
+            }
+        });
+    }
     
     // 回车键设置自定义金额
-    customAmountInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            setCustomAmountBtn.click();
-        }
-    });
+    if (customAmountInput) {
+        customAmountInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && setCustomAmountBtn) {
+                setCustomAmountBtn.click();
+            }
+        });
+    }
     
     // 模拟支付状态更新
     setInterval(() => {
@@ -214,12 +288,13 @@ function updateQRCode(amount) {
 function generateWechatQRCode(amount) {
     console.log(`正在切换到金额为 ¥${amount} 的微信支付二维码...`);
     
-    // 根据金额选择对应的二维码
+    // 根据金额选择对应的新二维码
     const qrCodeMap = {
-        10: 'wechat-qr-10.png',
-        20: 'wechat-qr-20.png', 
-        50: 'wechat-qr-50.png',
-        100: 'wechat-qr-100.png'
+        5.88: 'WechatIMG363.jpg',
+        8.88: '3591759208694_.pic.jpg',
+        10.88: '3601759208695_.pic.jpg', 
+        16.88: '3581759208690_.pic.jpg',
+        28.88: '3611759208695_.pic.jpg'
     };
     
     const qrImage = document.querySelector('.qr-image');
@@ -660,6 +735,184 @@ function showCopyError(message) {
     }, 5000);
 }
 
+// 显示订单区域
+function showOrderSection(amount, packageText) {
+    const orderSection = document.getElementById('orderSection');
+    const orderAmount = document.getElementById('orderAmount');
+    const orderPackage = document.getElementById('orderPackage');
+    
+    if (orderSection && orderAmount && orderPackage) {
+        orderAmount.textContent = amount + '.00';
+        orderPackage.textContent = packageText;
+        orderSection.style.display = 'block';
+        
+        // 添加显示动画
+        orderSection.style.opacity = '0';
+        orderSection.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            orderSection.style.transition = 'all 0.3s ease';
+            orderSection.style.opacity = '1';
+            orderSection.style.transform = 'translateY(0)';
+        }, 100);
+    }
+}
+
+// 创建订单功能
+function createOrder() {
+    const orderAmount = document.getElementById('orderAmount').textContent;
+    const orderPackage = document.getElementById('orderPackage').textContent;
+    
+    // 显示订单确认
+    showOrderConfirmation(orderAmount, orderPackage);
+    
+    // 模拟创建订单过程
+    showOrderStatus('正在创建订单...');
+    
+    setTimeout(() => {
+        showOrderStatus('订单创建成功！');
+        
+        // 模拟跳转到微信支付
+        setTimeout(() => {
+            showWechatPayRedirect();
+        }, 1500);
+    }, 2000);
+}
+
+// 显示订单确认
+function showOrderConfirmation(amount, packageText) {
+    const confirmation = document.createElement('div');
+    confirmation.className = 'order-confirmation';
+    confirmation.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 12px;
+            z-index: 3000;
+            font-weight: 500;
+            text-align: center;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #e91e63;
+        ">
+            <div style="margin-bottom: 1rem; font-size: 1.2rem; color: #e91e63;">🛒 订单确认</div>
+            <div style="margin-bottom: 1rem;">
+                <strong>金额：</strong>¥${amount}<br>
+                <strong>套餐：</strong>${packageText}
+            </div>
+            <div style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                点击确认后将跳转到微信支付
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+                background: #e91e63;
+                color: white;
+                border: none;
+                padding: 0.8rem 1.5rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+                margin-right: 0.5rem;
+            ">确认下单</button>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+                background: #ccc;
+                color: white;
+                border: none;
+                padding: 0.8rem 1.5rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+            ">取消</button>
+        </div>
+    `;
+    
+    document.body.appendChild(confirmation);
+}
+
+// 显示订单状态
+function showOrderStatus(message) {
+    const statusDiv = document.createElement('div');
+    statusDiv.className = 'order-status';
+    statusDiv.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e91e63;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 2000;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            animation: slideIn 0.3s ease-out;
+        ">
+            🛒 ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(statusDiv);
+    
+    setTimeout(() => {
+        if (statusDiv.parentNode) {
+            statusDiv.parentNode.removeChild(statusDiv);
+        }
+    }, 3000);
+}
+
+// 显示微信支付跳转
+function showWechatPayRedirect() {
+    const redirectDiv = document.createElement('div');
+    redirectDiv.className = 'wechat-pay-redirect';
+    redirectDiv.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 12px;
+            z-index: 3000;
+            font-weight: 500;
+            text-align: center;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #07c160;
+        ">
+            <div style="margin-bottom: 1rem; font-size: 1.2rem; color: #07c160;">💳 微信支付</div>
+            <div style="margin-bottom: 1rem;">
+                正在跳转到微信支付...
+            </div>
+            <div style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                请使用微信扫描二维码完成支付
+            </div>
+            <div style="
+                width: 40px;
+                height: 40px;
+                border: 3px solid #07c160;
+                border-top: 3px solid transparent;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto;
+            "></div>
+        </div>
+    `;
+    
+    document.body.appendChild(redirectDiv);
+    
+    // 3秒后自动关闭
+    setTimeout(() => {
+        if (redirectDiv.parentNode) {
+            redirectDiv.parentNode.removeChild(redirectDiv);
+        }
+    }, 3000);
+}
+
 // 初始化额外功能
 document.addEventListener('DOMContentLoaded', addExtraFeatures);
 
@@ -695,4 +948,1362 @@ if ('ontouchstart' in window) {
             e.target.style.transform = '';
         }
     });
+}
+
+// 显示二维码弹窗（简化版）
+function showQRPopup(amount) {
+    console.log('显示弹窗，金额：', amount);
+    
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupQR = document.getElementById('popupQR');
+    const popupAmount = document.getElementById('popupAmount');
+    
+    // 设置金额
+    popupAmount.textContent = '¥' + amount;
+    
+    // 根据金额选择对应的新二维码
+    let qrSrc = '3591759208694_.pic.jpg'; // 默认二维码
+    if (amount == 5.88) {
+        qrSrc = 'WechatIMG363.jpg';
+        console.log('5.88对应二维码：', qrSrc);
+    } else if (amount == 8.88) {
+        qrSrc = '3591759208694_.pic.jpg';
+        console.log('8.88对应二维码：', qrSrc);
+    } else if (amount == 10.88) {
+        qrSrc = '3601759208695_.pic.jpg';
+        console.log('10.88对应二维码：', qrSrc);
+    } else if (amount == 16.88) {
+        qrSrc = '3581759208690_.pic.jpg';
+        console.log('16.88对应二维码：', qrSrc);
+    } else if (amount == 28.88) {
+        qrSrc = '3611759208695_.pic.jpg';
+        console.log('28.88对应二维码：', qrSrc);
+    }
+    
+    console.log('最终使用的二维码：', qrSrc);
+    
+    // 更新二维码图片
+    console.log('设置弹窗二维码src为：', qrSrc);
+    popupQR.src = qrSrc;
+    console.log('弹窗二维码src已设置为：', popupQR.src);
+    
+    // 显示弹窗
+    popupOverlay.classList.add('show');
+    
+    // 点击背景关闭弹窗
+    popupOverlay.addEventListener('click', function(e) {
+        if (e.target === popupOverlay) {
+            closePopup();
+        }
+    });
+}
+
+// 关闭弹窗
+function closePopup() {
+    const popupOverlay = document.getElementById('popupOverlay');
+    popupOverlay.classList.remove('show');
+}
+
+// 打开客服功能
+function openCustomerService() {
+    console.log('打开客服功能');
+    
+    // 创建客服弹窗
+    const serviceOverlay = document.createElement('div');
+    serviceOverlay.className = 'service-overlay';
+    serviceOverlay.innerHTML = `
+        <div class="service-popup">
+            <div class="service-header">
+                <h3>💬 客服助手</h3>
+                <button class="service-close" onclick="closeService()">×</button>
+            </div>
+            <div class="service-messages">
+                <div class="service-message bot">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        请上传支付凭证，秒发您的套餐
+                    </div>
+                </div>
+            </div>
+            <div class="service-input">
+                <input type="file" id="paymentProof" accept="image/*" style="display: none;" onchange="handleFileUpload(this)">
+                <input type="text" id="messageInput" placeholder="输入消息..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none;" onkeypress="handleKeyPress(event)">
+                <button class="upload-btn" onclick="document.getElementById('paymentProof').click()">
+                    📎 上传
+                </button>
+                <button class="send-btn" onclick="sendMessage()">
+                    发送
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(serviceOverlay);
+    
+    // 显示弹窗动画
+    setTimeout(() => {
+        serviceOverlay.classList.add('show');
+    }, 10);
+}
+
+// 关闭客服弹窗
+function closeService() {
+    const serviceOverlay = document.querySelector('.service-overlay');
+    if (serviceOverlay) {
+        serviceOverlay.classList.remove('show');
+        setTimeout(() => {
+            serviceOverlay.remove();
+        }, 300);
+    }
+}
+
+// 处理文件上传
+function handleFileUpload(input) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            addImageMessage(e.target.result, file.name);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// 添加图片消息到聊天
+function addImageMessage(imageSrc, fileName) {
+    const messagesContainer = document.querySelector('.service-messages');
+    const userMessage = document.createElement('div');
+    userMessage.className = 'service-message user';
+    userMessage.innerHTML = `
+        <div class="message-content image-message">
+            <div class="image-preview">
+                <img src="${imageSrc}" alt="支付凭证" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+            </div>
+            <div class="file-info">📎 ${fileName}</div>
+        </div>
+        <div class="message-avatar">👤</div>
+    `;
+    messagesContainer.appendChild(userMessage);
+    
+    // 自动回复
+    setTimeout(() => {
+        const botMessage = document.createElement('div');
+        botMessage.className = 'service-message bot';
+        botMessage.innerHTML = `
+            <div class="message-avatar">🤖</div>
+            <div class="message-content">
+                您的支付已收到，请添加QQ客服：<span class="qq-number">3139330983</span>
+            </div>
+        `;
+        messagesContainer.appendChild(botMessage);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 1000);
+    
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// 处理回车键发送消息
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+// 发送消息
+function sendMessage() {
+    const input = document.getElementById('messageInput');
+    if (input && input.value.trim()) {
+        const messagesContainer = document.querySelector('.service-messages');
+        const userMessage = document.createElement('div');
+        userMessage.className = 'service-message user';
+        userMessage.innerHTML = `
+            <div class="message-content">
+                ${input.value}
+            </div>
+            <div class="message-avatar">👤</div>
+        `;
+        messagesContainer.appendChild(userMessage);
+        
+        // 自动回复 - 文字消息回复上传凭证提示
+        setTimeout(() => {
+            const botMessage = document.createElement('div');
+            botMessage.className = 'service-message bot';
+            botMessage.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    请您上传支付凭证
+                </div>
+            `;
+            messagesContainer.appendChild(botMessage);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 1000);
+        
+        input.value = '';
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+}
+
+// ==================== 新增营销功能 ====================
+
+// 1. 离开页面挽留弹窗
+function initExitIntent() {
+    console.log('初始化离开页面挽留弹窗...');
+    let exitIntentShown = false;
+    
+    // 监听鼠标离开页面
+    document.addEventListener('mouseleave', function(e) {
+        if (e.clientY <= 0 && !exitIntentShown) {
+            setTimeout(() => {
+                showExitIntent();
+                exitIntentShown = true;
+            }, 1000);
+        }
+    });
+    
+    // 监听页面关闭前事件
+    window.addEventListener('beforeunload', function(e) {
+        if (!exitIntentShown) {
+            showExitIntent();
+            exitIntentShown = true;
+        }
+    });
+}
+
+function showExitIntent() {
+    console.log('显示离开页面挽留弹窗');
+    const overlay = document.getElementById('exitIntentOverlay');
+    if (overlay) {
+        overlay.classList.add('show');
+    }
+}
+
+function closeExitIntent() {
+    console.log('关闭离开页面挽留弹窗');
+    const overlay = document.getElementById('exitIntentOverlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+    }
+}
+
+// 2. 购买人数实时统计
+function initPurchaseCounter() {
+    console.log('初始化购买人数统计...');
+    
+    // 模拟实时购买数据
+    setInterval(() => {
+        updatePurchaseStats();
+    }, 30000); // 每30秒更新一次
+    
+    // 初始更新
+    updatePurchaseStats();
+}
+
+function updatePurchaseStats() {
+    const todayElement = document.getElementById('todayPurchases');
+    const monthElement = document.getElementById('monthPurchases');
+    
+    if (todayElement) {
+        const currentToday = parseInt(todayElement.textContent) || 247;
+        const increment = Math.floor(Math.random() * 3) + 1; // 1-3的随机增长
+        todayElement.textContent = currentToday + increment;
+    }
+    
+    if (monthElement) {
+        const currentMonth = parseInt(monthElement.textContent.replace(',', '')) || 1856;
+        const increment = Math.floor(Math.random() * 5) + 1; // 1-5的随机增长
+        monthElement.textContent = (currentMonth + increment).toLocaleString();
+    }
+}
+
+// 3. 限时弹窗优惠
+function initTimedPopup() {
+    console.log('初始化限时弹窗优惠...');
+    
+    // 用户停留30秒后显示
+    setTimeout(() => {
+        showTimedPopup();
+    }, 30000);
+}
+
+function showTimedPopup() {
+    console.log('显示限时弹窗优惠');
+    const overlay = document.getElementById('timedPopupOverlay');
+    if (overlay) {
+        overlay.classList.add('show');
+        startTimedCountdown();
+    }
+}
+
+function closeTimedPopup() {
+    console.log('关闭限时弹窗优惠');
+    const overlay = document.getElementById('timedPopupOverlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+    }
+}
+
+function startTimedCountdown() {
+    let timeLeft = 300; // 5分钟
+    const countdownElement = document.getElementById('timedCountdown');
+    
+    const timer = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        if (countdownElement) {
+            countdownElement.textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        timeLeft--;
+        
+        if (timeLeft < 0) {
+            clearInterval(timer);
+            closeTimedPopup();
+        }
+    }, 1000);
+}
+
+// 4. 移动端优化提示
+function initMobileOptimization() {
+    console.log('初始化移动端优化提示...');
+    
+    // 检测移动设备
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // 移动设备用户停留10秒后显示
+        setTimeout(() => {
+            showMobileBanner();
+        }, 10000);
+    }
+}
+
+function showMobileBanner() {
+    console.log('显示移动端优化提示');
+    const banner = document.getElementById('mobileOfferBanner');
+    if (banner) {
+        banner.classList.add('show');
+    }
+}
+
+function closeMobileBanner() {
+    console.log('关闭移动端优化提示');
+    const banner = document.getElementById('mobileOfferBanner');
+    if (banner) {
+        banner.classList.remove('show');
+    }
+}
+
+// 5. 滚动进度奖励
+function initScrollRewards() {
+    console.log('初始化滚动进度奖励...');
+    
+    let scrollRewardsShown = {
+        25: false,
+        50: false,
+        75: false,
+        90: false
+    };
+    
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / scrollHeight) * 100;
+        
+        // 25%滚动奖励
+        if (scrollPercent >= 25 && !scrollRewardsShown[25]) {
+            showScrollReward('恭喜！您已浏览25%内容，获得额外优惠券！');
+            scrollRewardsShown[25] = true;
+        }
+        
+        // 50%滚动奖励
+        if (scrollPercent >= 50 && !scrollRewardsShown[50]) {
+            showScrollReward('太棒了！您已浏览50%内容，享受VIP价格！');
+            scrollRewardsShown[50] = true;
+        }
+        
+        // 75%滚动奖励
+        if (scrollPercent >= 75 && !scrollRewardsShown[75]) {
+            showScrollReward('即将完成！您已浏览75%内容，获得专属服务！');
+            scrollRewardsShown[75] = true;
+        }
+        
+        // 90%滚动奖励
+        if (scrollPercent >= 90 && !scrollRewardsShown[90]) {
+            showScrollReward('完美！您已浏览90%内容，现在购买享受最大优惠！');
+            scrollRewardsShown[90] = true;
+        }
+    });
+}
+
+function showScrollReward(message) {
+    console.log('显示滚动奖励:', message);
+    
+    // 创建奖励提示
+    const rewardDiv = document.createElement('div');
+    rewardDiv.className = 'scroll-reward';
+    rewardDiv.innerHTML = `
+        <div class="reward-content">
+            <span class="reward-icon">🎉</span>
+            <span class="reward-text">${message}</span>
+            <button class="reward-close" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+    `;
+    
+    // 添加样式
+    rewardDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        z-index: 10000;
+        animation: slideInRight 0.5s ease;
+        max-width: 300px;
+    `;
+    
+    document.body.appendChild(rewardDiv);
+    
+    // 5秒后自动消失
+    setTimeout(() => {
+        if (rewardDiv.parentElement) {
+            rewardDiv.remove();
+        }
+    }, 5000);
+}
+
+// 初始化营销功能
+function initMarketingFeatures() {
+    console.log('初始化营销功能...');
+    // 倒计时功能
+    startCountdown();
+    
+    // 新增营销功能
+    initExitIntent();
+    initPurchaseCounter();
+    initTimedPopup();
+    initMobileOptimization();
+    initScrollRewards();
+    
+    // 添加社会证明动画
+    animateSocialProof();
+    
+    // 营销漏斗逻辑
+    initMarketingFunnel();
+    
+    // 稀缺性管理
+    manageScarcity();
+}
+
+
+// 倒计时功能
+function startCountdown() {
+    console.log('开始初始化倒计时...');
+    
+    // 等待DOM完全加载
+    setTimeout(() => {
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        
+        console.log('找到的元素:', { hoursElement, minutesElement, secondsElement });
+        
+        if (!hoursElement || !minutesElement || !secondsElement) {
+            console.log('倒计时元素未找到，退出');
+            return;
+        }
+        
+        // 设置倒计时结束时间（24小时后）
+        const endTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+        console.log('倒计时结束时间:', new Date(endTime));
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = endTime - now;
+            
+            if (timeLeft > 0) {
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                console.log(`倒计时更新: ${hours}:${minutes}:${seconds}`);
+                
+                hoursElement.textContent = hours.toString().padStart(2, '0');
+                minutesElement.textContent = minutes.toString().padStart(2, '0');
+                secondsElement.textContent = seconds.toString().padStart(2, '0');
+            } else {
+                // 倒计时结束，重置为24小时
+                console.log('倒计时结束，重置');
+                hoursElement.textContent = '23';
+                minutesElement.textContent = '59';
+                secondsElement.textContent = '59';
+            }
+        }
+        
+        // 立即更新一次
+        updateCountdown();
+        
+        // 每秒更新一次
+        setInterval(updateCountdown, 1000);
+    }, 1000);
+}
+
+// 动态更新购买人数
+function updatePurchaseCount() {
+    const statElements = document.querySelectorAll('.stat');
+    let currentCount = 12847;
+    
+    setInterval(() => {
+        // 随机增加购买人数
+        if (Math.random() < 0.3) { // 30%概率增加
+            currentCount += Math.floor(Math.random() * 3) + 1;
+            
+            statElements.forEach(stat => {
+                if (stat.textContent.includes('人购买')) {
+                    stat.innerHTML = `👥 已有 <strong>${currentCount.toLocaleString()}</strong> 人购买`;
+                }
+            });
+        }
+    }, 5000);
+}
+
+// 添加紧迫感提示
+function addUrgencyMessages() {
+    const urgencyMessages = [
+        "🔥 限时特惠，错过再等一年！",
+        "⚡ 仅剩最后几个名额！",
+        "💎 新用户专享，立即抢购！",
+        "🎯 今日特价，明日恢复原价！"
+    ];
+    
+    let messageIndex = 0;
+    
+    setInterval(() => {
+        const urgencyBanner = document.querySelector('.urgency-text');
+        if (urgencyBanner) {
+            urgencyBanner.textContent = urgencyMessages[messageIndex];
+            messageIndex = (messageIndex + 1) % urgencyMessages.length;
+        }
+    }, 8000);
+}
+
+// 社会证明动画
+function animateSocialProof() {
+    const stats = document.querySelectorAll('.stat');
+    
+    stats.forEach((stat, index) => {
+        setTimeout(() => {
+            stat.style.animation = 'bounce 0.6s ease-in-out';
+            setTimeout(() => {
+                stat.style.animation = '';
+            }, 600);
+        }, index * 200);
+    });
+}
+
+// 添加购买按钮点击效果
+function enhanceButtonClicks() {
+    const buttons = document.querySelectorAll('.amount-btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            // 添加点击动画
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
+            // 显示购买提示
+            showPurchaseHint(this);
+        });
+    });
+}
+
+// 显示购买提示
+function showPurchaseHint(button) {
+    const amount = button.getAttribute('data-amount');
+    const hints = [
+        `💰 选择¥${amount}套餐，立即享受专属服务！`,
+        `🎯 已有${Math.floor(Math.random() * 1000) + 500}人选择此套餐！`,
+        `⚡ 限时优惠，立即下单享受特价！`,
+        `💎 优质内容，物超所值！`
+    ];
+    
+    const randomHint = hints[Math.floor(Math.random() * hints.length)];
+    
+    // 创建提示元素
+    const hintElement = document.createElement('div');
+    hintElement.textContent = randomHint;
+    hintElement.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #ff6b9d, #e91e63);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 10000;
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        animation: bounce 0.6s ease-in-out;
+    `;
+    
+    document.body.appendChild(hintElement);
+    
+    setTimeout(() => {
+        hintElement.remove();
+    }, 2000);
+}
+
+// 初始化按钮增强效果
+document.addEventListener('DOMContentLoaded', enhanceButtonClicks);
+
+// 初始化用户反馈滚轮（保留原有功能）
+function initFeedbackCarousel() {
+    // 这个函数现在主要用于兼容性，实际功能由新的函数处理
+}
+
+// 生成随机评价数据
+function generateFeedbackData(count, type) {
+    console.log('开始生成评价数据，数量:', count, '类型:', type);
+    
+    const names = [
+        '231', '红', '李', '王', '张', '刘', '陈', '杨', '黄', '周',
+        '小吴', '小郑', '小何', '小赵', '小钱', '小孙', '小胡', '小朱', '小高', '小林',
+        '小徐', '小马', '小郭', '小罗', '小梁', '小宋', '小唐', '小许', '小韩', '小冯',
+        '小邓', '小曹', '小彭', '小曾', '小萧', '小田', '小董', '小袁', '小潘', '小于',
+        '小蒋', '小蔡', '小余', '小杜', '小叶', '小程', '小苏', '小魏', '小吕', '小丁'
+    ];
+    
+    const avatars = ['👤', '👨', '👩', '🧑', '👦', '👧', '👶', '👴', '👵', '👱', '👲', '👳'];
+    
+    const feedbackTexts = [
+        '内容质量很高，物超所值！',
+        '服务态度很好，回复及时',
+        '图片清晰，内容精彩',
+        '性价比很高，推荐购买',
+        '客服很专业，问题解决很快',
+        '内容更新及时，质量稳定',
+        '价格合理，服务周到',
+        '购买流程简单，体验很好',
+        '内容丰富多样，值得推荐',
+        '客服态度友好，很有耐心',
+        '内容质量超出预期',
+        '服务专业，值得信赖',
+        '购买后立即发货，效率很高',
+        '内容真实，没有虚假宣传',
+        '客服回复及时，解决问题快',
+        '价格公道，性价比很高',
+        '内容丰富，更新频率高',
+        '服务态度好，体验很棒',
+        '内容质量稳定，值得购买',
+        '客服专业，服务周到',
+        '购买流程顺畅，体验良好',
+        '内容精彩，物有所值',
+        '服务效率高，回复及时',
+        '价格合理，质量保证',
+        '内容丰富，满足需求',
+        '客服态度好，解决问题快',
+        '内容更新及时，质量稳定',
+        '服务专业，值得推荐',
+        '购买体验很好，会再次购买',
+        '内容真实可靠，没有失望',
+        '客服回复快，服务周到',
+        '价格公道，性价比高',
+        '内容丰富多样，质量很好',
+        '服务态度友好，体验不错',
+        '内容质量超出预期，很满意',
+        '客服专业，问题解决及时',
+        '购买流程简单，发货快速',
+        '内容精彩，值得购买',
+        '服务效率高，态度很好',
+        '价格合理，质量保证',
+        '内容丰富，更新及时',
+        '客服回复及时，服务专业',
+        '内容真实，没有虚假',
+        '服务周到，体验良好',
+        '价格公道，性价比很高',
+        '内容丰富多样，质量稳定',
+        '客服态度好，解决问题快',
+        '内容更新及时，质量保证',
+        '服务专业，值得信赖',
+        '购买体验很好，推荐购买'
+    ];
+    
+    const ratings = ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐⭐', '⭐⭐⭐⭐⭐', '⭐⭐⭐⭐⭐', '⭐⭐⭐⭐⭐'];
+    
+    const feedback = [];
+    
+    for (let i = 0; i < count; i++) {
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+        const randomText = feedbackTexts[Math.floor(Math.random() * feedbackTexts.length)];
+        const randomRating = ratings[Math.floor(Math.random() * ratings.length)];
+        
+        feedback.push({
+            name: randomName + (Math.floor(Math.random() * 999) + 1),
+            avatar: randomAvatar,
+            text: randomText,
+            rating: randomRating
+        });
+    }
+    
+    console.log('评价数据生成完成，共', feedback.length, '条');
+    return feedback;
+}
+
+// 初始化历史评价（100条）
+function initHistoricalFeedback() {
+    console.log('开始初始化历史评价...');
+    const historicalTrack = document.getElementById('historicalTrack');
+    if (!historicalTrack) {
+        console.log('未找到historicalTrack元素');
+        return;
+    }
+    console.log('找到historicalTrack元素');
+    
+    // 生成100条历史评价数据，确保快速加载
+    const historicalFeedback = generateFeedbackData(100, 'historical');
+    console.log('生成了', historicalFeedback.length, '条评价数据');
+    
+    // 渲染历史评价
+    const htmlContent = historicalFeedback.map(item => `
+        <div class="feedback-item" onclick="showFeedbackDetail(this)">
+            <div class="user-avatar">${item.avatar}</div>
+            <div class="feedback-content">
+                <div class="user-name">${item.name}</div>
+                <div class="feedback-text">"${item.text}"</div>
+                <div class="feedback-rating">${item.rating}</div>
+            </div>
+        </div>
+    `).join('');
+    
+    // 强制替换所有内容，确保显示200条评价
+    console.log('强制替换所有内容，生成200条评价');
+    historicalTrack.innerHTML = htmlContent;
+    console.log('历史评价HTML已插入');
+    
+    // 复制反馈项以实现无缝滚动
+    const feedbackItems = historicalTrack.querySelectorAll('.feedback-item');
+    console.log('找到', feedbackItems.length, '个反馈项');
+    
+    // 复制所有项目，确保无缝循环
+    feedbackItems.forEach(item => {
+        const clone = item.cloneNode(true);
+        historicalTrack.appendChild(clone);
+    });
+    
+    console.log('复制完成，现在有', historicalTrack.querySelectorAll('.feedback-item').length, '个反馈项');
+    
+    // 添加鼠标悬停控制
+    const carousel = document.getElementById('historicalFeedback');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', function() {
+            historicalTrack.style.animationPlayState = 'paused';
+        });
+        
+        carousel.addEventListener('mouseleave', function() {
+            historicalTrack.style.animationPlayState = 'running';
+        });
+    }
+    
+    // 设置容器高度
+    const totalItems = feedbackItems.length;
+    const itemHeight = 80;
+    const trackHeight = totalItems * itemHeight;
+    historicalTrack.style.height = trackHeight + 'px';
+    console.log('设置容器高度为:', trackHeight + 'px');
+}
+
+// 初始化今日评价（50条）
+function initTodayFeedback() {
+    console.log('开始初始化今日评价...');
+    const todayTrack = document.getElementById('todayTrack');
+    if (!todayTrack) {
+        console.log('未找到todayTrack元素');
+        return;
+    }
+    console.log('找到todayTrack元素');
+    
+    // 生成30条今日评价数据，确保快速加载
+    const todayFeedback = generateFeedbackData(30, 'today');
+    console.log('生成了', todayFeedback.length, '条今日评价数据');
+    
+    // 渲染今日评价
+    const htmlContent = todayFeedback.map(item => `
+        <div class="today-feedback-item" onclick="showTodayFeedbackDetail(this)">
+            <div class="today-user-avatar">${item.avatar}</div>
+            <div class="today-feedback-content">
+                <div class="today-user-name">${item.name}</div>
+                <div class="today-feedback-text">"${item.text}"</div>
+                <div class="today-feedback-rating">${item.rating}</div>
+            </div>
+        </div>
+    `).join('');
+    
+    // 强制替换所有内容，确保显示50条评价
+    console.log('强制替换今日评价内容，生成50条评价');
+    todayTrack.innerHTML = htmlContent;
+    console.log('今日评价HTML已插入');
+    
+    // 复制反馈项以实现无缝滚动
+    const feedbackItems = todayTrack.querySelectorAll('.today-feedback-item');
+    console.log('找到', feedbackItems.length, '个今日反馈项');
+    
+    // 复制所有项目，确保无缝循环
+    feedbackItems.forEach(item => {
+        const clone = item.cloneNode(true);
+        todayTrack.appendChild(clone);
+    });
+    
+    console.log('今日评价复制完成，现在有', todayTrack.querySelectorAll('.today-feedback-item').length, '个反馈项');
+    
+    // 添加鼠标悬停控制
+    const carousel = document.getElementById('todayFeedback');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', function() {
+            todayTrack.style.animationPlayState = 'paused';
+        });
+        
+        carousel.addEventListener('mouseleave', function() {
+            todayTrack.style.animationPlayState = 'running';
+        });
+    }
+    
+    // 设置容器高度
+    const totalItems = feedbackItems.length;
+    const itemHeight = 60;
+    const trackHeight = totalItems * itemHeight;
+    todayTrack.style.height = trackHeight + 'px';
+    console.log('设置今日评价容器高度为:', trackHeight + 'px');
+}
+
+// 显示今日评价详情
+function showTodayFeedbackDetail(feedbackItem) {
+    const userName = feedbackItem.querySelector('.today-user-name').textContent;
+    const feedbackText = feedbackItem.querySelector('.today-feedback-text').textContent;
+    
+    const detailModal = document.createElement('div');
+    detailModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease-in-out;
+    `;
+    
+    detailModal.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.4s ease-out;
+        ">
+            <div style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, #ff6b9d, #e91e63);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin: 0 auto 20px;
+            ">👤</div>
+            <h3 style="color: #d63384; margin-bottom: 15px; font-size: 1.2rem;">${userName}</h3>
+            <p style="color: #666; font-size: 1rem; line-height: 1.5; margin-bottom: 15px; font-style: italic;">"${feedbackText}"</p>
+            <div style="color: #ffd700; font-size: 1.2rem; margin-bottom: 20px;">⭐⭐⭐⭐⭐</div>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+                background: linear-gradient(135deg, #ff6b9d, #e91e63);
+                color: white;
+                border: none;
+                padding: 10px 25px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            ">关闭</button>
+        </div>
+    `;
+    
+    document.body.appendChild(detailModal);
+    
+    // 点击背景关闭
+    detailModal.addEventListener('click', function(e) {
+        if (e.target === detailModal) {
+            detailModal.remove();
+        }
+    });
+}
+
+// 显示反馈详情
+function showFeedbackDetail(feedbackItem) {
+    const userName = feedbackItem.querySelector('.user-name').textContent;
+    const feedbackText = feedbackItem.querySelector('.feedback-text').textContent;
+    
+    const detailModal = document.createElement('div');
+    detailModal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease-in-out;
+    `;
+    
+    detailModal.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.4s ease-out;
+        ">
+            <div style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, #ff6b9d, #e91e63);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: white;
+                margin: 0 auto 20px;
+            ">👤</div>
+            <h3 style="color: #d63384; margin-bottom: 15px; font-size: 1.2rem;">${userName}</h3>
+            <p style="color: #666; font-size: 1rem; line-height: 1.5; margin-bottom: 15px; font-style: italic;">"${feedbackText}"</p>
+            <div style="color: #ffd700; font-size: 1.2rem; margin-bottom: 20px;">⭐⭐⭐⭐⭐</div>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+                background: linear-gradient(135deg, #ff6b9d, #e91e63);
+                color: white;
+                border: none;
+                padding: 10px 25px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            ">关闭</button>
+        </div>
+    `;
+    
+    document.body.appendChild(detailModal);
+    
+    // 点击背景关闭
+    detailModal.addEventListener('click', function(e) {
+        if (e.target === detailModal) {
+            detailModal.remove();
+        }
+    });
+}
+
+// 营销漏斗逻辑
+function initMarketingFunnel() {
+    // 显示欢迎弹窗
+    setTimeout(() => {
+        showWelcomePopup();
+    }, 1000);
+    
+    // 步骤指示器更新
+    updateFunnelSteps();
+}
+
+// 显示欢迎弹窗
+function showWelcomePopup() {
+    const welcomePopup = document.getElementById('welcomePopup');
+    if (welcomePopup) {
+        welcomePopup.style.display = 'flex';
+    }
+}
+
+// 关闭欢迎弹窗
+function closeWelcome() {
+    console.log('closeWelcome函数被调用');
+    const welcomePopup = document.getElementById('welcomePopup');
+    if (welcomePopup) {
+        console.log('找到欢迎弹窗，正在关闭');
+        welcomePopup.style.display = 'none';
+        // 开始营销引导
+        startMarketingGuidance();
+    } else {
+        console.log('未找到欢迎弹窗元素');
+    }
+}
+
+// 开始营销引导
+function startMarketingGuidance() {
+    // 高亮推荐套餐
+    highlightRecommendedPackage();
+    
+    // 显示引导提示
+    showGuidanceTips();
+    
+    // 开始行为追踪
+    trackUserBehavior();
+}
+
+// 高亮推荐套餐
+function highlightRecommendedPackage() {
+    const bestValueBtn = document.querySelector('.amount-btn.best-value');
+    if (bestValueBtn) {
+        bestValueBtn.style.animation = 'pulse 2s infinite';
+        bestValueBtn.style.transform = 'scale(1.05)';
+    }
+}
+
+// 显示引导提示
+function showGuidanceTips() {
+    const tips = [
+        "💡 推荐选择¥100套餐，性价比最高！",
+        "🎯 已有2,847人选择此套餐，好评如潮！",
+        "⚡ 限时特价，错过再等一年！",
+        "💎 全套打包，一次购买终身享受！"
+    ];
+    
+    let tipIndex = 0;
+    
+    setInterval(() => {
+        showFloatingTip(tips[tipIndex]);
+        tipIndex = (tipIndex + 1) % tips.length;
+    }, 10000);
+}
+
+// 显示浮动提示
+function showFloatingTip(message) {
+    const tipElement = document.createElement('div');
+    tipElement.textContent = message;
+    tipElement.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #ff6b9d, #e91e63);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 10000;
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        animation: slideIn 0.5s ease-out;
+        max-width: 300px;
+    `;
+    
+    document.body.appendChild(tipElement);
+    
+    setTimeout(() => {
+        tipElement.remove();
+    }, 4000);
+}
+
+// 更新漏斗步骤
+function updateFunnelSteps() {
+    const steps = document.querySelectorAll('.step');
+    
+    // 默认激活第一步
+    steps[0].classList.add('active');
+}
+
+// 关闭所有营销弹窗
+function closeAllMarketingPopups() {
+    console.log('关闭所有营销弹窗...');
+    
+    // 关闭限时弹窗优惠
+    const timedPopup = document.getElementById('timedPopupOverlay');
+    if (timedPopup) {
+        timedPopup.classList.remove('show');
+    }
+    
+    // 关闭离开页面挽留弹窗
+    const exitIntentPopup = document.getElementById('exitIntentOverlay');
+    if (exitIntentPopup) {
+        exitIntentPopup.classList.remove('show');
+    }
+    
+    // 关闭移动端优化提示
+    const mobileBanner = document.getElementById('mobileOfferBanner');
+    if (mobileBanner) {
+        mobileBanner.classList.remove('show');
+    }
+    
+    // 关闭客服弹窗（如果存在）
+    const serviceOverlay = document.querySelector('.service-overlay');
+    if (serviceOverlay) {
+        serviceOverlay.remove();
+    }
+}
+
+// 选择套餐
+function selectPackage(amount, description) {
+    console.log('选择套餐：', amount, description);
+    
+    // 关闭所有营销弹窗
+    closeAllMarketingPopups();
+    
+    // 更新步骤指示器
+    updateFunnelStep(2);
+    
+    // 显示选择确认
+    showSelectionConfirmation(amount, description);
+    
+    // 更新稀缺性
+    updateScarcity(amount);
+    
+    // 更新主页面上的二维码
+    generateWechatQRCode(amount);
+    
+    // 更新金额显示
+    const amountDisplay = document.getElementById('amount');
+    if (amountDisplay) {
+        amountDisplay.textContent = amount;
+    }
+    
+    // 立即显示支付弹窗
+    showQRPopup(amount);
+}
+
+// 更新漏斗步骤
+function updateFunnelStep(stepNumber) {
+    const steps = document.querySelectorAll('.step');
+    steps.forEach((step, index) => {
+        step.classList.remove('active');
+        if (index < stepNumber) {
+            step.classList.add('active');
+        }
+    });
+}
+
+// 显示选择确认
+function showSelectionConfirmation(amount, description) {
+    const confirmation = document.createElement('div');
+    confirmation.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+            animation: bounce 0.6s ease-in-out;
+        ">
+            <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">
+                ✅ 已选择套餐
+            </div>
+            <div style="font-size: 1rem;">
+                ${description} - ¥${amount}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(confirmation);
+    
+    setTimeout(() => {
+        confirmation.remove();
+    }, 2000);
+}
+
+// 稀缺性管理
+function manageScarcity() {
+    const remainingSpots = document.getElementById('remainingSpots');
+    if (!remainingSpots) return;
+    
+    let spots = 11;
+    
+    // 随机减少名额
+    setInterval(() => {
+        if (Math.random() < 0.1 && spots > 1) { // 10%概率减少
+            spots--;
+            remainingSpots.textContent = spots;
+            
+            // 显示名额减少提示
+            if (spots <= 5) {
+                showScarcityAlert();
+            }
+        }
+    }, 8000);
+}
+
+// 更新稀缺性
+function updateScarcity(amount) {
+    const remainingSpots = document.getElementById('remainingSpots');
+    if (remainingSpots) {
+        let spots = parseInt(remainingSpots.textContent);
+        if (spots > 0) {
+            spots--;
+            remainingSpots.textContent = spots;
+        }
+    }
+}
+
+// 显示稀缺性警告
+function showScarcityAlert() {
+    const alert = document.createElement('div');
+    alert.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff5722, #f44336);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 8px 25px rgba(255, 87, 34, 0.4);
+            animation: pulse 1s infinite;
+        ">
+            <div style="font-size: 1rem; font-weight: bold;">
+                ⚠️ 名额即将售罄！
+            </div>
+            <div style="font-size: 0.9rem;">
+                仅剩最后几个名额，立即抢购！
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(alert);
+    
+    setTimeout(() => {
+        alert.remove();
+    }, 5000);
+}
+
+// 行为引导
+function addBehavioralNudges() {
+    // 鼠标移动追踪
+    let mouseIdleTime = 0;
+    let lastMouseMove = Date.now();
+    
+    document.addEventListener('mousemove', () => {
+        lastMouseMove = Date.now();
+        mouseIdleTime = 0;
+    });
+    
+    // 检查用户是否停留
+    setInterval(() => {
+        mouseIdleTime = Date.now() - lastMouseMove;
+        
+        // 如果用户停留超过30秒，显示引导
+        if (mouseIdleTime > 30000) {
+            showIdleGuidance();
+            lastMouseMove = Date.now(); // 重置计时
+        }
+    }, 5000);
+}
+
+// 显示空闲引导
+function showIdleGuidance() {
+    const guidance = document.createElement('div');
+    guidance.innerHTML = `
+        <div style="
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b9d, #e91e63);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 25px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+            animation: bounce 0.6s ease-in-out;
+            max-width: 250px;
+        ">
+            <div style="font-size: 0.9rem; font-weight: bold; margin-bottom: 5px;">
+                💡 还在犹豫吗？
+            </div>
+            <div style="font-size: 0.8rem;">
+                限时特惠，错过再等一年！
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(guidance);
+    
+    setTimeout(() => {
+        guidance.remove();
+    }, 4000);
+}
+
+// 用户行为追踪
+function trackUserBehavior() {
+    let scrollDepth = 0;
+    let timeOnPage = 0;
+    
+    // 追踪滚动深度
+    window.addEventListener('scroll', () => {
+        scrollDepth = Math.max(scrollDepth, window.scrollY / (document.body.scrollHeight - window.innerHeight));
+    });
+    
+    // 追踪页面停留时间
+    setInterval(() => {
+        timeOnPage++;
+        
+        // 根据用户行为显示不同引导
+        if (timeOnPage > 60 && scrollDepth < 0.5) {
+            showScrollGuidance();
+        }
+    }, 1000);
+}
+
+// 显示滚动引导
+function showScrollGuidance() {
+    const scrollGuide = document.createElement('div');
+    scrollGuide.innerHTML = `
+        <div style="
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+            animation: float 2s ease-in-out infinite;
+        ">
+            <div style="font-size: 0.8rem; font-weight: bold;">
+                👆 向下滚动查看更多
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(scrollGuide);
+    
+    setTimeout(() => {
+        scrollGuide.remove();
+    }, 3000);
 }

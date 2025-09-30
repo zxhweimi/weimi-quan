@@ -9,13 +9,58 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 左侧：吸引男性的图表和美女展示区域 -->
-        <div class="left-panel">
-            <div class="header">
-                <h1 class="title">秘语，微密圈，百位网红主播</h1>
-                <p class="subtitle">实时魅力指数分析</p>
+    <!-- 营销漏斗第一步：吸引注意力 -->
+    <div class="marketing-funnel">
+        <!-- 欢迎弹窗 -->
+        <div class="welcome-popup" id="welcomePopup" style="display: flex;">
+            <div class="popup-content">
+                <div class="welcome-header">
+                    <h2>🎉 欢迎来到专属私密空间！</h2>
+                    <p>限时免费体验，错过再等一年！</p>
+                </div>
+                <div class="welcome-benefits">
+                    <div class="benefit">✅ 100%正品保证</div>
+                    <div class="benefit">✅ 7×24小时客服</div>
+                    <div class="benefit">✅ 不满意全额退款</div>
+                </div>
+                <button class="welcome-btn" onclick="closeWelcome()">立即体验</button>
             </div>
+        </div>
+
+        <!-- 引导步骤指示器 -->
+        <div class="funnel-steps">
+            <div class="step active" data-step="1">
+                <span class="step-number">1</span>
+                <span class="step-text">选择套餐</span>
+            </div>
+            <div class="step" data-step="2">
+                <span class="step-number">2</span>
+                <span class="step-text">确认支付</span>
+            </div>
+            <div class="step" data-step="3">
+                <span class="step-number">3</span>
+                <span class="step-text">享受服务</span>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- 左侧：吸引男性的图表和美女展示区域 -->
+            <div class="left-panel">
+                <div class="header">
+                    <div class="urgency-banner">
+                        <span class="fire-icon">🔥</span>
+                        <span class="urgency-text">限时特惠！仅剩 <span id="countdown">23:59:59</span> 结束</span>
+                    </div>
+                    <h1 class="title">🔥 秘语，微密圈，百位网红主播 🔥</h1>
+                    <p class="subtitle">✨ 精选优质内容，专属私密体验 ✨</p>
+                    <div class="social-proof">
+                        <div class="proof-stats">
+                            <span class="stat">👥 已有 <strong>12,847</strong> 人购买</span>
+                            <span class="stat">⭐ <strong>4.9</strong> 分好评</span>
+                            <span class="stat">💎 <strong>98%</strong> 满意度</span>
+                        </div>
+                    </div>
+                </div>
             
             <!-- 美女展示区域 -->
             <div class="beauty-showcase">
@@ -42,47 +87,16 @@
                 </div>
             </div>
 
-            <!-- 数据图表区域 -->
-            <div class="charts-section">
-                <div class="chart-container">
-                    <h3>魅力趋势分析</h3>
-                    <div class="chart">
-                        <canvas id="attractionChart"></canvas>
-                    </div>
+            <!-- 历史评价滚轮区域 -->
+            <div class="feedback-section">
+                <div class="feedback-header">
+                    <h3>📚 历史评价 (1430条)</h3>
+                    <p>查看所有用户真实反馈</p>
                 </div>
                 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h4>关注度</h4>
-                            <p class="stat-number">1,234</p>
-                            <span class="stat-change positive">+12%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h4>喜爱度</h4>
-                            <p class="stat-number">856</p>
-                            <span class="stat-change positive">+8%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h4>互动率</h4>
-                            <p class="stat-number">92%</p>
-                            <span class="stat-change positive">+5%</span>
-                        </div>
+                <div class="feedback-carousel" id="historicalFeedback">
+                    <div class="feedback-track" id="historicalTrack">
+                        <!-- 历史评价将通过JavaScript动态生成200条 -->
                     </div>
                 </div>
             </div>
@@ -91,30 +105,146 @@
         <!-- 右侧：微信收付款二维码区域 -->
         <div class="right-panel">
             <div class="payment-header">
-                <h2>微信支付</h2>
-                <p>扫码完成支付</p>
+                <div class="discount-badge">
+                    <span class="badge-text">🎉 新用户专享</span>
+                </div>
+                <h2>💳 微信支付</h2>
+                <p>🔒 扫码完成支付</p>
+                <div class="value-proposition">
+                    <div class="benefit-item">✅ 100% 正品保证</div>
+                    <div class="benefit-item">✅ 7×24小时客服</div>
+                    <div class="benefit-item">✅ 不满意全额退款</div>
+                </div>
             </div>
             
             <div class="qr-section">
                 <div class="qr-container">
                     <div class="qr-code">
-                        <img src="wechat-qr.png" alt="微信支付二维码" class="qr-image">
+                        <img src="3591759208694_.pic.jpg" alt="微信支付二维码" class="qr-image">
                     </div>
                     <div class="qr-info">
                         <h3>收款二维码</h3>
                         <p class="amount">金额：¥<span id="amount">0.00</span></p>
+                        <!-- 营销套路：锚定效应 -->
+                        <div class="price-anchor">
+                            <div class="original-price">原价：¥99</div>
+                            <div class="discount-price">限时特价：¥8.88</div>
+                            <div class="savings">立省¥90.12！</div>
+                        </div>
+
+                        <!-- 倒计时器 -->
+                        <div class="countdown-timer">
+                            <div class="timer-label">⏰ 限时优惠倒计时</div>
+                            <div class="timer-display">
+                                <span class="time-unit">
+                                    <span class="time-number" id="hours">23</span>
+                                    <span class="time-label">时</span>
+                                </span>
+                                <span class="time-separator">:</span>
+                                <span class="time-unit">
+                                    <span class="time-number" id="minutes">59</span>
+                                    <span class="time-label">分</span>
+                                </span>
+                                <span class="time-separator">:</span>
+                                <span class="time-unit">
+                                    <span class="time-number" id="seconds">59</span>
+                                    <span class="time-label">秒</span>
+                                </span>
+                            </div>
+                        </div>
+
+
                         <div class="payment-options">
-                            <button class="amount-btn" data-amount="10">¥10（任选一人）</button>
-                            <button class="amount-btn" data-amount="20">¥20（任选三人）</button>
-                            <button class="amount-btn" data-amount="50">¥50（任选7人）</button>
-                            <button class="amount-btn" data-amount="100">¥100（全套打包）</button>
+                            <!-- 第一行：¥8.88 (左上) 和 ¥10.88 (右上) -->
+                            <button class="amount-btn" data-amount="8.88" onclick="selectPackage(8.88, '基础套餐')">
+                                <div class="btn-content">
+                                    <div class="price">¥8.88（任选一人）</div>
+                                    
+                                    <div class="tag">💎 超值</div>
+                                    <div class="urgency">仅剩5个名额</div>
+                                </div>
+                            </button>
+                            <button class="amount-btn popular" data-amount="10.88" onclick="selectPackage(10.88, '标准套餐')">
+                                <div class="btn-content">
+                                    <div class="price">¥10.88（任选三人）</div>
+                                   
+                                    <div class="tag">🔥 最热销</div>
+                                    <div class="urgency">仅剩3个名额</div>
+                                </div>
+                            </button>
+                            <!-- 第二行：¥16.88 (左下) 和 ¥28.88 (右下) -->
+                            <button class="amount-btn" data-amount="16.88" onclick="selectPackage(16.88, '高级套餐')">
+                                <div class="btn-content">
+                                    <div class="price">¥16.88（任选七人）</div>
+                                    
+                                    <div class="tag">⭐ 推荐</div>
+                                    <div class="urgency">仅剩2个名额</div>
+                                </div>
+                            </button>
+                            <button class="amount-btn best-value" data-amount="28.88" onclick="selectPackage(28.88, '至尊套餐')">
+                                <div class="btn-content">
+                                    <div class="price">¥28.88（全网红全套打包）</div>
+                                    
+                                    <div class="tag">🏆 最佳选择</div>
+                                    <div class="urgency">仅剩1个名额</div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- 购买人数统计 -->
+                        <div class="purchase-stats">
+                            <div class="stats-item">
+                                <span class="stats-icon">👥</span>
+                                <span class="stats-text">今日已有 <span class="stats-number" id="todayPurchases">247</span> 人购买</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-icon">🔥</span>
+                                <span class="stats-text">本月累计 <span class="stats-number" id="monthPurchases">1,856</span> 人</span>
+                            </div>
+                        </div>
+
+                        <!-- 客服按钮 -->
+                        <div class="customer-service-btn" onclick="openCustomerService()">
+                            <span class="service-icon">💬</span>
+                            <span class="service-text">客服（秒发）</span>
                         </div>
                         
                         
+                        
+
+                        <!-- 今日评价区域 -->
+                        <div class="today-feedback-section">
+                            <div class="today-feedback-header">
+                                <h4>🔥 今日评价 (30条)</h4>
+                                <p>实时更新，最新反馈</p>
+                            </div>
+                            
+                            <div class="today-feedback-carousel" id="todayFeedback">
+                                <div class="today-feedback-track" id="todayTrack">
+                                    <!-- 今日评价将通过JavaScript动态生成 -->
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="qq-service">
-                            <h4>QQ客服</h4>
-                            <p>支付完成功添加QQ客服：<span class="qq-number">3472132884</span><br><small class="backup-qq">备用QQ1837909217</small><br>支付完成后，备注您的心意女生，自动发送您的套餐</p>
-                            <button class="qq-btn" onclick="copyQQ()">复制QQ号</button>
+                            <h4>📞 备用客服</h4>
+                            <p>备用QQ客服：<span class="qq-number">3139330983</span><br><small class="backup-qq"></p>
+                            <button class="qq-btn" onclick="copyQQ()">📋 复制QQ号</button>
+                        </div>
+                        
+                        <div class="guarantee">
+                            <div class="guarantee-item">
+                                <span class="icon">🛡️</span>
+                                <span class="text">7天无理由退款</span>
+                            </div>
+                            <div class="guarantee-item">
+                                <span class="icon">🔒</span>
+                                <span class="text">隐私保护</span>
+                            </div>
+                            <div class="guarantee-item">
+                                <span class="icon">⚡</span>
+                                <span class="text">即时发货</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,7 +268,175 @@
         </div>
     </div>
 
+    <!-- 弹窗 -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <img class="popup-qr" id="popupQR" src="3591759208694_.pic.jpg" alt="微信支付二维码">
+            <div class="popup-amount" id="popupAmount">¥8.88</div>
+            <div class="popup-instructions">
+                <div class="instruction-step">
+                    <span class="step-icon">📱</span>
+                    <span class="step-text">截图到微信支付</span>
+                </div>
+                <div class="instruction-step">
+                    <span class="step-icon">💬</span>
+                    <span class="step-text">支付完成后进入客服上传凭证</span>
+                </div>
+                <div class="instruction-step highlight">
+                    <span class="step-icon">⚡</span>
+                    <span class="step-text">客服秒发，24小时在线</span>
+                </div>
+            </div>
+            <button class="popup-close" onclick="closePopup()">关闭</button>
+        </div>
+    </div>
+
+    <!-- 离开页面挽留弹窗 -->
+    <div class="exit-intent-overlay" id="exitIntentOverlay">
+        <div class="exit-intent-popup">
+            <div class="exit-header">
+                <h3>🚨 等等！别走！</h3>
+                <button class="exit-close" onclick="closeExitIntent()">×</button>
+            </div>
+            <div class="exit-content">
+                <div class="exit-offer">
+                    <div class="exit-price">限时特价仅需</div>
+                    <div class="exit-amount">¥6.88</div>
+                    <div class="exit-savings">比刚才便宜¥2！</div>
+                </div>
+                <div class="exit-urgency">
+                    <p>⏰ 此优惠仅限现在，离开页面后失效！</p>
+                    <p>🎁 现在购买还送价值¥50的专属服务！</p>
+                </div>
+                <div class="exit-buttons">
+                    <button class="exit-buy-btn" onclick="selectPackage(6.88, '特惠套餐')">立即抢购</button>
+                    <button class="exit-stay-btn" onclick="closeExitIntent()">继续浏览</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 限时弹窗优惠 -->
+    <div class="timed-popup-overlay" id="timedPopupOverlay">
+        <div class="timed-popup">
+            <div class="timed-header">
+                <h3>🎉 恭喜！您获得专属优惠</h3>
+                <button class="timed-close" onclick="closeTimedPopup()">×</button>
+            </div>
+            <div class="timed-content">
+                <div class="timed-offer">
+                    <div class="timed-original">原价：¥8.88</div>
+                    <div class="timed-discount">新用户专享：¥5.88</div>
+                    <div class="timed-bonus">+ 免费升级到高级套餐</div>
+                </div>
+                <div class="timed-timer">
+                    <span>⏰ 优惠倒计时：</span>
+                    <span id="timedCountdown">05:00</span>
+                </div>
+                <button class="timed-buy-btn" onclick="selectPackage(5.88, '新用户专享套餐')">立即抢购</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 移动端优化提示 -->
+    <div class="mobile-offer-banner" id="mobileOfferBanner">
+        <div class="mobile-content">
+            <span class="mobile-icon">📱</span>
+            <span class="mobile-text">手机用户专享：额外减¥1，仅需¥7.88！</span>
+            <button class="mobile-close" onclick="closeMobileBanner()">×</button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
+    
+    <!-- 额外的初始化脚本，确保历史评价一定会生成 -->
+    <script>
+        // 页面完全加载后再次确保评价生成
+        window.addEventListener('load', function() {
+            console.log('页面完全加载，检查评价...');
+            setTimeout(function() {
+                // 检查历史评价
+                const historicalTrack = document.getElementById('historicalTrack');
+                if (historicalTrack && historicalTrack.children.length < 20) {
+                    console.log('检测到历史评价数量不足，强制生成100条评价');
+                    if (typeof initHistoricalFeedback === 'function') {
+                        initHistoricalFeedback();
+                    } else {
+                        // 如果函数不存在，直接生成内容
+                        const names = ['小明', '小红', '小李', '小王', '小张', '小刘', '小陈', '小杨', '小黄', '小周'];
+                        const avatars = ['👤', '👨', '👩', '🧑', '👦', '👧', '👶', '👴', '👵', '👱'];
+                        const texts = [
+                            '内容质量很高，物超所值！', '服务态度很好，回复及时！', '图片清晰，内容精彩！',
+                            '性价比很高，推荐购买！', '客服很专业，问题解决很快！', '内容更新及时，质量稳定！',
+                            '价格合理，服务周到！', '购买流程简单，体验很好！', '内容丰富多样，值得推荐！',
+                            '客服态度友好，很有耐心！', '内容质量超出预期！', '服务专业，值得信赖！'
+                        ];
+                        
+                        let htmlContent = '';
+                        for (let i = 0; i < 100; i++) {
+                            const name = names[Math.floor(Math.random() * names.length)] + (i + 1);
+                            const avatar = avatars[Math.floor(Math.random() * avatars.length)];
+                            const text = texts[Math.floor(Math.random() * texts.length)];
+                            
+                            htmlContent += `
+                                <div class="feedback-item">
+                                    <div class="user-avatar">${avatar}</div>
+                                    <div class="feedback-content">
+                                        <div class="user-name">${name}</div>
+                                        <div class="feedback-text">"${text}"</div>
+                                        <div class="feedback-rating">⭐⭐⭐⭐⭐</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        
+                        historicalTrack.innerHTML = htmlContent;
+                        console.log('已生成100条历史评价');
+                    }
+                }
+                
+                // 检查今日评价
+                const todayTrack = document.getElementById('todayTrack');
+                if (todayTrack && todayTrack.children.length < 10) {
+                    console.log('检测到今日评价数量不足，强制生成30条评价');
+                    if (typeof initTodayFeedback === 'function') {
+                        initTodayFeedback();
+                    } else {
+                        // 如果函数不存在，直接生成内容
+                        const names = ['小明', '小红', '小李', '小王', '小张', '小刘', '小陈', '小杨', '小黄', '小周'];
+                        const avatars = ['👤', '👨', '👩', '🧑', '👦', '👧', '👶', '👴', '👵', '👱'];
+                        const texts = [
+                            '内容质量很高，物超所值！', '服务态度很好，回复及时！', '图片清晰，内容精彩！',
+                            '性价比很高，推荐购买！', '客服很专业，问题解决很快！', '内容更新及时，质量稳定！',
+                            '价格合理，服务周到！', '购买流程简单，体验很好！', '内容丰富多样，值得推荐！',
+                            '客服态度友好，很有耐心！', '内容质量超出预期！', '服务专业，值得信赖！'
+                        ];
+                        
+                        let htmlContent = '';
+                        for (let i = 0; i < 30; i++) {
+                            const name = names[Math.floor(Math.random() * names.length)] + (i + 1);
+                            const avatar = avatars[Math.floor(Math.random() * avatars.length)];
+                            const text = texts[Math.floor(Math.random() * texts.length)];
+                            
+                            htmlContent += `
+                                <div class="today-feedback-item">
+                                    <div class="today-user-avatar">${avatar}</div>
+                                    <div class="today-feedback-content">
+                                        <div class="today-user-name">${name}</div>
+                                        <div class="today-feedback-text">"${text}"</div>
+                                        <div class="today-feedback-rating">⭐⭐⭐⭐⭐</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        
+                        todayTrack.innerHTML = htmlContent;
+                        console.log('已生成30条今日评价');
+                    }
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
