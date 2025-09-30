@@ -9,6 +9,28 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('已删除现有的测试按钮');
     }
     
+    // 强制删除任何可能存在的移动端弹窗
+    const mobileBanners = document.querySelectorAll('[class*="mobile"], [id*="mobile"], [class*="banner"]');
+    mobileBanners.forEach(banner => {
+        if (banner.textContent.includes('手机用户') || banner.textContent.includes('7.88') || banner.textContent.includes('额外减')) {
+            banner.remove();
+            console.log('已删除移动端弹窗:', banner);
+        }
+    });
+    
+    // 删除任何包含移动端优惠文本的元素
+    const allElements = document.querySelectorAll('*');
+    allElements.forEach(element => {
+        if (element.textContent && (
+            element.textContent.includes('手机用户专享') ||
+            element.textContent.includes('额外减¥1') ||
+            element.textContent.includes('仅需¥7.88')
+        )) {
+            element.remove();
+            console.log('已删除包含移动端优惠文本的元素:', element);
+        }
+    });
+    
     // 图表功能已移除，改为用户反馈滚轮
     
     // 初始化支付功能
@@ -1247,36 +1269,6 @@ function startTimedCountdown() {
     }, 1000);
 }
 
-// 4. 移动端优化提示
-function initMobileOptimization() {
-    console.log('初始化移动端优化提示...');
-    
-    // 检测移动设备
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-        // 移动设备用户停留10秒后显示
-        setTimeout(() => {
-            showMobileBanner();
-        }, 10000);
-    }
-}
-
-function showMobileBanner() {
-    console.log('显示移动端优化提示');
-    const banner = document.getElementById('mobileOfferBanner');
-    if (banner) {
-        banner.classList.add('show');
-    }
-}
-
-function closeMobileBanner() {
-    console.log('关闭移动端优化提示');
-    const banner = document.getElementById('mobileOfferBanner');
-    if (banner) {
-        banner.classList.remove('show');
-    }
-}
 
 // 5. 滚动进度奖励
 function initScrollRewards() {
@@ -1369,7 +1361,6 @@ function initMarketingFeatures() {
     initExitIntent();
     initPurchaseCounter();
     initTimedPopup();
-    initMobileOptimization();
     initScrollRewards();
     
     // 添加社会证明动画
@@ -2029,11 +2020,6 @@ function closeAllMarketingPopups() {
         exitIntentPopup.classList.remove('show');
     }
     
-    // 关闭移动端优化提示
-    const mobileBanner = document.getElementById('mobileOfferBanner');
-    if (mobileBanner) {
-        mobileBanner.classList.remove('show');
-    }
     
     // 关闭客服弹窗（如果存在）
     const serviceOverlay = document.querySelector('.service-overlay');
