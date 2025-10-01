@@ -26,12 +26,55 @@ function preloadQRImages() {
     });
 }
 
+// 初始化固定客服按钮
+function initFixedCustomerService() {
+    const fixedServiceBtn = document.querySelector('.fixed-service-btn');
+    if (!fixedServiceBtn) return;
+    
+    // 添加点击动画效果
+    fixedServiceBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 添加点击动画
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            this.style.transform = '';
+        }, 150);
+        
+        // 调用客服功能
+        openCustomerService();
+    });
+    
+    // 添加悬停效果
+    fixedServiceBtn.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px) scale(1.05)';
+    });
+    
+    fixedServiceBtn.addEventListener('mouseleave', function() {
+        this.style.transform = '';
+    });
+    
+    // 添加呼吸动画效果
+    setInterval(() => {
+        if (!document.querySelector('.service-overlay')) {
+            fixedServiceBtn.style.animation = 'pulse 2s infinite';
+        } else {
+            fixedServiceBtn.style.animation = '';
+        }
+    }, 3000);
+    
+    console.log('固定客服按钮初始化完成');
+}
+
 // 等待DOM加载完成
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM加载完成，开始初始化');
     
     // 预加载所有二维码图片
     preloadQRImages();
+    
+    // 初始化固定客服按钮
+    initFixedCustomerService();
     
     // 确保删除任何可能存在的测试按钮
     const existingTestBtn = document.querySelector('button[style*="position: fixed"][style*="top: 10px"][style*="left: 10px"]');
@@ -1323,20 +1366,31 @@ function initExitIntent() {
     });
 }
 
+// 离开页面弹窗显示状态
+let exitIntentShown = false;
+
 function showExitIntent() {
+    if (exitIntentShown) {
+        console.log('离开页面弹窗已显示，跳过重复显示');
+        return;
+    }
+    
     console.log('显示离开页面挽留弹窗');
     const overlay = document.getElementById('exitIntentOverlay');
     if (overlay) {
         // 检查是否有其他弹窗显示
         const welcomePopup = document.getElementById('welcomePopup');
         const timedPopup = document.getElementById('timedPopupOverlay');
+        const serviceOverlay = document.querySelector('.service-overlay');
         
         if ((welcomePopup && welcomePopup.style.display !== 'none') || 
-            (timedPopup && timedPopup.classList.contains('show'))) {
+            (timedPopup && timedPopup.classList.contains('show')) ||
+            (serviceOverlay && serviceOverlay.style.display !== 'none')) {
             // 如果有其他弹窗显示，不显示离开页面弹窗
             return;
         }
         
+        exitIntentShown = true;
         overlay.classList.add('show');
         overlay.style.opacity = '0';
         overlay.style.transform = 'scale(0.8)';
@@ -1393,8 +1447,17 @@ function updatePurchaseStats() {
 }
 
 // 3. 限时弹窗优惠
+// 限时弹窗显示状态
+let timedPopupInitialized = false;
+
 function initTimedPopup() {
+    if (timedPopupInitialized) {
+        console.log('限时弹窗已初始化，跳过重复初始化');
+        return;
+    }
+    
     console.log('初始化限时弹窗优惠...');
+    timedPopupInitialized = true;
     
     // 用户停留30秒后显示
     setTimeout(() => {
@@ -1402,29 +1465,32 @@ function initTimedPopup() {
     }, 30000);
 }
 
+// 限时弹窗显示状态
+let timedPopupShown = false;
+
 function showTimedPopup() {
-    console.log('显示限时弹窗优惠');
-    const overlay = document.getElementById('timedPopupOverlay');
-    if (overlay) {
-        // 检查是否有其他弹窗显示
-        const welcomePopup = document.getElementById('welcomePopup');
-        if (welcomePopup && welcomePopup.style.display !== 'none') {
-            // 如果有欢迎弹窗显示，延迟显示限时弹窗
-            setTimeout(() => showTimedPopup(), 2000);
-            return;
-        }
-        
-        overlay.classList.add('show');
-        overlay.style.opacity = '0';
-        overlay.style.transform = 'scale(0.8)';
-        
-        // 添加显示动画
-        setTimeout(() => {
-            overlay.style.opacity = '1';
-            overlay.style.transform = 'scale(1)';
-            startTimedCountdown();
-        }, 50);
+    if (timedPopupShown) {
+        console.log('限时弹窗已显示，跳过重复显示');
+        return;
     }
+    
+    PopupManager.show('timed', () => {
+        console.log('显示限时弹窗优惠');
+        const overlay = document.getElementById('timedPopupOverlay');
+        if (overlay) {
+            timedPopupShown = true;
+            overlay.classList.add('show');
+            overlay.style.opacity = '0';
+            overlay.style.transform = 'scale(0.8)';
+            
+            // 添加显示动画
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+                overlay.style.transform = 'scale(1)';
+                startTimedCountdown();
+            }, 50);
+        }
+    });
 }
 
 function closeTimedPopup() {
@@ -1436,6 +1502,7 @@ function closeTimedPopup() {
         
         setTimeout(() => {
             overlay.classList.remove('show');
+            PopupManager.hide();
         }, 200);
     }
 }
@@ -1544,22 +1611,23 @@ function showScrollReward(message) {
     }, 5000);
 }
 
-// 初始化营销功能
+// 初始化营销功能（修复重复初始化问题）
 function initMarketingFeatures() {
     console.log('初始化营销功能...');
+    
     // 倒计时功能
     startCountdown();
     
     // 新增营销功能
     initExitIntent();
     initPurchaseCounter();
-    initTimedPopup();
+    // 移除重复的 initTimedPopup() 调用，由 initMarketingFunnel() 统一管理
     initScrollRewards();
     
     // 添加社会证明动画
     animateSocialProof();
     
-    // 营销漏斗逻辑
+    // 营销漏斗逻辑（包含限时弹窗初始化）
     initMarketingFunnel();
     
     // 稀缺性管理
@@ -2091,8 +2159,19 @@ function showFeedbackDetail(feedbackItem) {
     });
 }
 
-// 营销漏斗逻辑
+// 营销漏斗初始化状态
+let marketingFunnelInitialized = false;
+
+// 营销漏斗逻辑（修复闪烁问题）
 function initMarketingFunnel() {
+    if (marketingFunnelInitialized) {
+        console.log('营销漏斗已初始化，跳过重复初始化');
+        return;
+    }
+    
+    console.log('初始化营销漏斗...');
+    marketingFunnelInitialized = true;
+    
     // 显示欢迎弹窗
     setTimeout(() => {
         showWelcomePopup();
@@ -2102,24 +2181,26 @@ function initMarketingFunnel() {
     updateFunnelSteps();
 }
 
-// 显示欢迎弹窗（优化版）
+// 显示欢迎弹窗（使用弹窗管理器）
 function showWelcomePopup() {
-    const welcomePopup = document.getElementById('welcomePopup');
-    if (welcomePopup) {
-        // 确保没有其他弹窗显示
-        closeAllMarketingPopups();
-        
-        // 显示欢迎弹窗
-        welcomePopup.style.display = 'flex';
-        welcomePopup.style.opacity = '0';
-        welcomePopup.style.transform = 'scale(0.8)';
-        
-        // 添加显示动画
-        setTimeout(() => {
-            welcomePopup.style.opacity = '1';
-            welcomePopup.style.transform = 'scale(1)';
-        }, 50);
-    }
+    PopupManager.show('welcome', () => {
+        const welcomePopup = document.getElementById('welcomePopup');
+        if (welcomePopup) {
+            // 确保没有其他弹窗显示
+            closeAllMarketingPopups();
+            
+            // 显示欢迎弹窗
+            welcomePopup.style.display = 'flex';
+            welcomePopup.style.opacity = '0';
+            welcomePopup.style.transform = 'scale(0.8)';
+            
+            // 添加显示动画
+            setTimeout(() => {
+                welcomePopup.style.opacity = '1';
+                welcomePopup.style.transform = 'scale(1)';
+            }, 50);
+        }
+    });
 }
 
 // 关闭欢迎弹窗（超强优化版）
@@ -2155,6 +2236,9 @@ function closeWelcome() {
                     welcomeBtn.textContent = '立即体验';
                 }
                 
+                // 通知弹窗管理器
+                PopupManager.hide();
+                
                 // 开始营销引导
                 try {
                     startMarketingGuidance();
@@ -2182,8 +2266,38 @@ function closeWelcome() {
     }
 }
 
-// 开始营销引导
+// 弹窗管理器
+const PopupManager = {
+    currentPopup: null,
+    isTransitioning: false,
+    
+    show(popupType, callback) {
+        if (this.isTransitioning || this.currentPopup === popupType) {
+            return;
+        }
+        
+        this.isTransitioning = true;
+        this.currentPopup = popupType;
+        
+        if (callback) {
+            callback();
+        }
+        
+        setTimeout(() => {
+            this.isTransitioning = false;
+        }, 500);
+    },
+    
+    hide() {
+        this.currentPopup = null;
+        this.isTransitioning = false;
+    }
+};
+
+// 开始营销引导（简化版）
 function startMarketingGuidance() {
+    console.log('开始营销引导...');
+    
     // 高亮推荐套餐
     highlightRecommendedPackage();
     
@@ -2192,6 +2306,13 @@ function startMarketingGuidance() {
     
     // 开始行为追踪
     trackUserBehavior();
+    
+    // 延迟显示限时弹窗
+    setTimeout(() => {
+        if (!PopupManager.currentPopup) {
+            initTimedPopup();
+        }
+    }, 8000);
 }
 
 // 高亮推荐套餐
@@ -2226,7 +2347,7 @@ function showFloatingTip(message) {
     tipElement.textContent = message;
     tipElement.style.cssText = `
         position: fixed;
-        top: 20px;
+        top: 80px;
         right: 20px;
         background: linear-gradient(135deg, #ff6b9d, #e91e63);
         color: white;
@@ -2234,7 +2355,7 @@ function showFloatingTip(message) {
         border-radius: 25px;
         font-size: 14px;
         font-weight: 600;
-        z-index: 10000;
+        z-index: 9999;
         box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
         animation: slideIn 0.5s ease-out;
         max-width: 300px;
