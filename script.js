@@ -9,9 +9,29 @@ window.addEventListener('unhandledrejection', function(e) {
     // 不阻止页面继续运行
 });
 
+// 预加载所有二维码图片，避免闪烁
+function preloadQRImages() {
+    const qrImages = [
+        'WechatIMG363.jpg',
+        '3591759208694_.pic.jpg', 
+        '3601759208695_.pic.jpg',
+        '3581759208690_.pic.jpg',
+        '3611759208695_.pic.jpg'
+    ];
+    
+    qrImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+        console.log('预加载二维码图片：', src);
+    });
+}
+
 // 等待DOM加载完成
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM加载完成，开始初始化');
+    
+    // 预加载所有二维码图片
+    preloadQRImages();
     
     // 确保删除任何可能存在的测试按钮
     const existingTestBtn = document.querySelector('button[style*="position: fixed"][style*="top: 10px"][style*="left: 10px"]');
@@ -271,7 +291,7 @@ function initPaymentFeatures() {
     const customAmountInput = document.getElementById('customAmount');
     const setCustomAmountBtn = document.getElementById('setCustomAmount');
     
-    // 金额按钮点击事件
+    // 金额按钮点击事件（修复闪烁问题）
     amountButtons.forEach(button => {
         button.addEventListener('click', function() {
             const amount = parseFloat(this.getAttribute('data-amount'));
@@ -283,15 +303,17 @@ function initPaymentFeatures() {
             amountButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
-            // 立即更新主页面二维码
+            // 先更新主页面二维码，再显示弹窗
             updateMainQRCode(amount);
             
-            // 直接弹出二维码
-            showQRPopup(amount);
+            // 延迟显示弹窗，确保主页面二维码先更新
+            setTimeout(() => {
+                showQRPopup(amount);
+            }, 50);
         });
     });
     
-    // 自定义金额设置
+    // 自定义金额设置（修复闪烁问题）
     if (setCustomAmountBtn) {
         setCustomAmountBtn.addEventListener('click', function() {
             const customAmount = parseFloat(customAmountInput.value);
@@ -302,11 +324,13 @@ function initPaymentFeatures() {
                 // 清除所有按钮的激活状态
                 amountButtons.forEach(btn => btn.classList.remove('active'));
                 
-                // 立即更新主页面二维码
+                // 先更新主页面二维码，再显示弹窗
                 updateMainQRCode(customAmount);
                 
-                // 直接弹出二维码
-                showQRPopup(customAmount);
+                // 延迟显示弹窗，确保主页面二维码先更新
+                setTimeout(() => {
+                    showQRPopup(customAmount);
+                }, 50);
             }
         });
     }
@@ -356,7 +380,7 @@ function updatePaymentStatus(status) {
     }
 }
 
-// 更新主页面二维码（优化版）
+// 更新主页面二维码（修复闪烁问题）
 function updateMainQRCode(amount) {
     const qrImage = document.querySelector('.qr-image');
     
@@ -373,17 +397,23 @@ function updateMainQRCode(amount) {
     
     const qrSrc = qrCodeMap[amount] || '3591759208694_.pic.jpg';
     
-    // 立即更新二维码图片
-    qrImage.src = qrSrc;
-    
-    // 添加视觉反馈
-    qrImage.style.transform = 'scale(1.05)';
-    qrImage.style.boxShadow = '0 4px 15px rgba(233, 30, 99, 0.4)';
-    
-    setTimeout(() => {
-        qrImage.style.transform = 'scale(1)';
-        qrImage.style.boxShadow = '0 2px 8px rgba(255, 182, 193, 0.3)';
-    }, 300);
+    // 预加载图片，确保不闪烁
+    const img = new Image();
+    img.onload = function() {
+        // 图片加载完成后才更新src，避免闪烁
+        qrImage.src = qrSrc;
+        console.log('主页面二维码已更新为：', qrSrc);
+        
+        // 添加视觉反馈
+        qrImage.style.transform = 'scale(1.05)';
+        qrImage.style.boxShadow = '0 4px 15px rgba(233, 30, 99, 0.4)';
+        
+        setTimeout(() => {
+            qrImage.style.transform = 'scale(1)';
+            qrImage.style.boxShadow = '0 2px 8px rgba(255, 182, 193, 0.3)';
+        }, 300);
+    };
+    img.src = qrSrc;
 }
 
 // 更新二维码显示（保留兼容性）
@@ -1058,7 +1088,7 @@ if ('ontouchstart' in window) {
     });
 }
 
-// 显示二维码弹窗（优化版）
+// 显示二维码弹窗（修复闪烁问题）
 function showQRPopup(amount) {
     console.log('显示弹窗，金额：', amount);
     
@@ -1069,7 +1099,7 @@ function showQRPopup(amount) {
     // 立即设置金额
     popupAmount.textContent = '¥' + amount;
     
-    // 根据金额选择对应的二维码（立即切换，无延迟）
+    // 根据金额选择对应的二维码
     const qrCodeMap = {
         5.88: 'WechatIMG363.jpg',
         8.88: '3591759208694_.pic.jpg',
@@ -1080,8 +1110,14 @@ function showQRPopup(amount) {
     
     const qrSrc = qrCodeMap[amount] || '3591759208694_.pic.jpg';
     
-    // 立即更新二维码图片，无延迟
-    popupQR.src = qrSrc;
+    // 预加载图片，确保不闪烁
+    const img = new Image();
+    img.onload = function() {
+        // 图片加载完成后才更新src，避免闪烁
+        popupQR.src = qrSrc;
+        console.log('弹窗二维码已更新为：', qrSrc);
+    };
+    img.src = qrSrc;
     
     // 立即显示弹窗
     popupOverlay.classList.add('show');
