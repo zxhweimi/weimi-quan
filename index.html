@@ -23,7 +23,7 @@
                     <div class="benefit">✅ 7×24小时客服</div>
                     <div class="benefit">✅ 不满意全额退款</div>
                 </div>
-                <button class="welcome-btn" onclick="closeWelcome()">立即体验</button>
+                <button class="welcome-btn" id="welcomeBtn" onclick="if(typeof closeWelcome === 'function') { closeWelcome(); } else { document.getElementById('welcomePopup').style.display = 'none'; }">立即体验</button>
             </div>
         </div>
 
@@ -338,14 +338,6 @@
         </div>
     </div>
 
-    <!-- 移动端优化提示 -->
-    <div class="mobile-offer-banner" id="mobileOfferBanner">
-        <div class="mobile-content">
-            <span class="mobile-icon">📱</span>
-            <span class="mobile-text">手机用户专享：额外减¥1，仅需¥7.88！</span>
-            <button class="mobile-close" onclick="closeMobileBanner()">×</button>
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>

@@ -1028,11 +1028,40 @@ body::before {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 10001;
+    min-width: 120px;
+    min-height: 50px;
+    display: inline-block;
+    text-align: center;
+    line-height: 1.2;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: manipulation;
 }
 
 .welcome-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: #f8f9fa;
+}
+
+.welcome-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.welcome-btn:focus {
+    outline: 2px solid #e91e63;
+    outline-offset: 2px;
 }
 
 /* 引导步骤指示器 */
