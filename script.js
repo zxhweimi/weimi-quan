@@ -1752,49 +1752,10 @@ function enhanceButtonClicks() {
                 this.style.transform = '';
             }, 150);
             
-            // 显示购买提示
-            showPurchaseHint(this);
         });
     });
 }
 
-// 显示购买提示
-function showPurchaseHint(button) {
-    const amount = button.getAttribute('data-amount');
-    const hints = [
-        `💰 选择¥${amount}套餐，立即享受专属服务！`,
-        `🎯 已有${Math.floor(Math.random() * 1000) + 500}人选择此套餐！`,
-        `⚡ 限时优惠，立即下单享受特价！`,
-        `💎 优质内容，物超所值！`
-    ];
-    
-    const randomHint = hints[Math.floor(Math.random() * hints.length)];
-    
-    // 创建提示元素
-    const hintElement = document.createElement('div');
-    hintElement.textContent = randomHint;
-    hintElement.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, #ff6b9d, #e91e63);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-size: 14px;
-        font-weight: 600;
-        z-index: 10000;
-        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
-        animation: bounce 0.6s ease-in-out;
-    `;
-    
-    document.body.appendChild(hintElement);
-    
-    setTimeout(() => {
-        hintElement.remove();
-    }, 2000);
-}
 
 // 初始化按钮增强效果
 document.addEventListener('DOMContentLoaded', enhanceButtonClicks);
@@ -1819,7 +1780,6 @@ function generateFeedbackData(count, type) {
     const avatars = ['👤', '👨', '👩', '🧑', '👦', '👧', '👶', '👴', '👵', '👱', '👲', '👳'];
     
     const feedbackTexts = [
-        '内容质量很高，物超所值！',
         '服务态度很好，回复及时',
         '图片清晰，内容精彩',
         '性价比很高，推荐购买',
@@ -1840,7 +1800,6 @@ function generateFeedbackData(count, type) {
         '内容质量稳定，值得购买',
         '客服专业，服务周到',
         '购买流程顺畅，体验良好',
-        '内容精彩，物有所值',
         '服务效率高，回复及时',
         '价格合理，质量保证',
         '内容丰富，满足需求',
@@ -2172,99 +2131,12 @@ function initMarketingFunnel() {
     console.log('初始化营销漏斗...');
     marketingFunnelInitialized = true;
     
-    // 显示欢迎弹窗
-    setTimeout(() => {
-        showWelcomePopup();
-    }, 1000);
     
     // 步骤指示器更新
     updateFunnelSteps();
 }
 
-// 显示欢迎弹窗（使用弹窗管理器）
-function showWelcomePopup() {
-    PopupManager.show('welcome', () => {
-        const welcomePopup = document.getElementById('welcomePopup');
-        if (welcomePopup) {
-            // 确保没有其他弹窗显示
-            closeAllMarketingPopups();
-            
-            // 显示欢迎弹窗
-            welcomePopup.style.display = 'flex';
-            welcomePopup.style.opacity = '0';
-            welcomePopup.style.transform = 'scale(0.8)';
-            
-            // 添加显示动画
-            setTimeout(() => {
-                welcomePopup.style.opacity = '1';
-                welcomePopup.style.transform = 'scale(1)';
-            }, 50);
-        }
-    });
-}
 
-// 关闭欢迎弹窗（超强优化版）
-function closeWelcome() {
-    console.log('closeWelcome函数被调用');
-    
-    try {
-        const welcomePopup = document.getElementById('welcomePopup');
-        if (welcomePopup) {
-            console.log('找到欢迎弹窗，正在关闭');
-            
-            // 立即禁用按钮，防止重复点击
-            const welcomeBtn = document.querySelector('.welcome-btn');
-            if (welcomeBtn) {
-                welcomeBtn.disabled = true;
-                welcomeBtn.style.opacity = '0.5';
-                welcomeBtn.textContent = '正在加载...';
-            }
-            
-            // 添加关闭动画
-            welcomePopup.style.transition = 'all 0.3s ease';
-            welcomePopup.style.opacity = '0';
-            welcomePopup.style.transform = 'scale(0.8)';
-            
-            // 延迟隐藏，避免卡顿
-            setTimeout(() => {
-                welcomePopup.style.display = 'none';
-                
-                // 恢复按钮状态
-                if (welcomeBtn) {
-                    welcomeBtn.disabled = false;
-                    welcomeBtn.style.opacity = '1';
-                    welcomeBtn.textContent = '立即体验';
-                }
-                
-                // 通知弹窗管理器
-                PopupManager.hide();
-                
-                // 开始营销引导
-                try {
-                    startMarketingGuidance();
-                } catch (e) {
-                    console.log('营销引导启动失败，但弹窗已关闭');
-                }
-            }, 300);
-        } else {
-            console.log('未找到欢迎弹窗元素，尝试强制关闭');
-            // 强制关闭所有可能的弹窗
-            const allPopups = document.querySelectorAll('[id*="popup"], [class*="popup"]');
-            allPopups.forEach(popup => {
-                if (popup.style.display !== 'none') {
-                    popup.style.display = 'none';
-                }
-            });
-        }
-    } catch (error) {
-        console.error('关闭欢迎弹窗时出错:', error);
-        // 强制隐藏所有弹窗
-        const welcomePopup = document.getElementById('welcomePopup');
-        if (welcomePopup) {
-            welcomePopup.style.display = 'none';
-        }
-    }
-}
 
 // 弹窗管理器
 const PopupManager = {
@@ -2418,8 +2290,6 @@ function selectPackage(amount, description) {
     // 更新步骤指示器
     updateFunnelStep(2);
     
-    // 显示选择确认
-    showSelectionConfirmation(amount, description);
     
     // 更新稀缺性
     updateScarcity(amount);
@@ -2448,39 +2318,6 @@ function updateFunnelStep(stepNumber) {
     });
 }
 
-// 显示选择确认
-function showSelectionConfirmation(amount, description) {
-    const confirmation = document.createElement('div');
-    confirmation.innerHTML = `
-        <div style="
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #4caf50, #45a049);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            text-align: center;
-            z-index: 10000;
-            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
-            animation: bounce 0.6s ease-in-out;
-        ">
-            <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">
-                ✅ 已选择套餐
-            </div>
-            <div style="font-size: 1rem;">
-                ${description} - ¥${amount}
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(confirmation);
-    
-    setTimeout(() => {
-        confirmation.remove();
-    }, 2000);
-}
 
 // 稀缺性管理
 function manageScarcity() {
