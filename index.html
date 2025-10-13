@@ -149,39 +149,59 @@
 
                         <div class="payment-options">
                             <!-- 第一行：¥8.88 (左上) 和 ¥10.88 (右上) -->
-                            <button class="amount-btn" data-amount="8.88" onclick="selectPackage(8.88, '基础套餐')">
-                                <div class="btn-content">
-                                    <div class="price">¥8.88（任选一人）</div>
-                                    
-                                    <div class="tag">💎 超值</div>
-                                    <div class="urgency">仅剩5个名额</div>
-                                </div>
-                            </button>
-                            <button class="amount-btn popular" data-amount="10.88" onclick="selectPackage(10.88, '标准套餐')">
-                                <div class="btn-content">
-                                    <div class="price">¥10.88（任选三人）</div>
-                                   
-                                    <div class="tag">🔥 最热销</div>
-                                    <div class="urgency">仅剩3个名额</div>
-                                </div>
-                            </button>
+                            <div class="package-wrapper">
+                                <button class="amount-btn" data-amount="8.88" onclick="selectPackage(8.88, '基础套餐')">
+                                    <div class="btn-content">
+                                        <div class="price">¥8.88（任选一人）</div>
+                                        
+                                        <div class="tag">💎 超值</div>
+                                        <div class="urgency">仅剩5个名额</div>
+                                    </div>
+                                </button>
+                                <button class="preview-btn" onclick="openPreview(event)">
+                                    <i class="fas fa-eye"></i> 预览
+                                </button>
+                            </div>
+                            <div class="package-wrapper">
+                                <button class="amount-btn popular" data-amount="10.88" onclick="selectPackage(10.88, '标准套餐')">
+                                    <div class="btn-content">
+                                        <div class="price">¥10.88（任选三人）</div>
+                                       
+                                        <div class="tag">🔥 最热销</div>
+                                        <div class="urgency">仅剩3个名额</div>
+                                    </div>
+                                </button>
+                                <button class="preview-btn" onclick="openPreview(event)">
+                                    <i class="fas fa-eye"></i> 预览
+                                </button>
+                            </div>
                             <!-- 第二行：¥16.88 (左下) 和 ¥28.88 (右下) -->
-                            <button class="amount-btn" data-amount="16.88" onclick="selectPackage(16.88, '高级套餐')">
-                                <div class="btn-content">
-                                    <div class="price">¥16.88（任选七人）</div>
-                                    
-                                    <div class="tag">⭐ 推荐</div>
-                                    <div class="urgency">仅剩2个名额</div>
-                                </div>
-                            </button>
-                            <button class="amount-btn best-value" data-amount="28.88" onclick="selectPackage(28.88, '至尊套餐')">
-                                <div class="btn-content">
-                                    <div class="price">¥28.88（全网红全套打包）</div>
-                                    
-                                    <div class="tag">🏆 最佳选择</div>
-                                    <div class="urgency">仅剩1个名额</div>
-                                </div>
-                            </button>
+                            <div class="package-wrapper">
+                                <button class="amount-btn" data-amount="16.88" onclick="selectPackage(16.88, '高级套餐')">
+                                    <div class="btn-content">
+                                        <div class="price">¥16.88（任选七人）</div>
+                                        
+                                        <div class="tag">⭐ 推荐</div>
+                                        <div class="urgency">仅剩2个名额</div>
+                                    </div>
+                                </button>
+                                <button class="preview-btn" onclick="openPreview(event)">
+                                    <i class="fas fa-eye"></i> 预览
+                                </button>
+                            </div>
+                            <div class="package-wrapper">
+                                <button class="amount-btn best-value" data-amount="28.88" onclick="selectPackage(28.88, '至尊套餐')">
+                                    <div class="btn-content">
+                                        <div class="price">¥28.88（全网红全套打包）</div>
+                                        
+                                        <div class="tag">🏆 最佳选择</div>
+                                        <div class="urgency">仅剩1个名额</div>
+                                    </div>
+                                </button>
+                                <button class="preview-btn" onclick="openPreview(event)">
+                                    <i class="fas fa-eye"></i> 预览
+                                </button>
+                            </div>
                         </div>
 
                         <!-- 购买人数统计 -->
@@ -327,6 +347,36 @@
                     <span id="timedCountdown">05:00</span>
                 </div>
                 <button class="timed-buy-btn" onclick="selectPackage(5.88, '新用户专享套餐')">立即抢购</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预览弹窗 -->
+    <div class="preview-overlay" id="previewOverlay">
+        <div class="preview-modal">
+            <div class="preview-header">
+                <h3>📸 内容预览</h3>
+                <button class="preview-close" onclick="closePreview()">×</button>
+            </div>
+            <div class="preview-content">
+                <button class="preview-nav prev" onclick="prevImage()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="preview-image-container">
+                    <img id="previewImage" src="" alt="预览图片" class="preview-image">
+                    <div class="preview-counter">
+                        <span id="currentImage">1</span> / <span id="totalImages">5</span>
+                    </div>
+                </div>
+                <button class="preview-nav next" onclick="nextImage()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="preview-thumbnails" id="previewThumbnails">
+                <!-- 缩略图将通过JavaScript动态生成 -->
+            </div>
+            <div class="preview-tip">
+                💡 左右滑动或点击箭头查看更多图片
             </div>
         </div>
     </div>

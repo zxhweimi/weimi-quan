@@ -2493,3 +2493,192 @@ function showScrollGuidance() {
         scrollGuide.remove();
     }, 3000);
 }
+
+// ==================== 预览功能 ====================
+
+// 预览图片数组
+const previewImages = [
+    'Screenshot_20251012_230501_com_hihonor_baidu_brow(1).jpg',  // 原第4张
+    'Screenshot_20251013_111743_com_hihonor_baidu_brow(1).jpg',  // 原第5张
+    'Screenshot_20251012_141433_com_hihonor_baidu_brow.jpg',     // 原第3张(位置不变)
+    'Screenshot_20251012_125915_com_tfkjlll_cvc898bice.jpg',     // 原第1张
+    'Screenshot_20251012_134041_com_btrbrb_ttcb78787ce.jpg'      // 原第2张
+];
+
+let currentPreviewIndex = 0;
+
+// 打开预览弹窗
+function openPreview(event) {
+    console.log('打开预览弹窗');
+    
+    // 阻止事件冒泡，防止触发套餐按钮的点击事件
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
+    const overlay = document.getElementById('previewOverlay');
+    const previewImage = document.getElementById('previewImage');
+    const currentImageSpan = document.getElementById('currentImage');
+    const totalImagesSpan = document.getElementById('totalImages');
+    
+    if (!overlay) {
+        console.error('找不到预览弹窗元素');
+        return;
+    }
+    
+    // 初始化预览
+    currentPreviewIndex = 0;
+    previewImage.src = previewImages[currentPreviewIndex];
+    currentImageSpan.textContent = currentPreviewIndex + 1;
+    totalImagesSpan.textContent = previewImages.length;
+    
+    // 生成缩略图
+    generateThumbnails();
+    
+    // 显示弹窗
+    overlay.classList.add('show');
+    
+    // 添加键盘事件监听
+    document.addEventListener('keydown', handlePreviewKeyboard);
+    
+    // 添加触摸滑动支持
+    addTouchSupport();
+}
+
+// 关闭预览弹窗
+function closePreview() {
+    console.log('关闭预览弹窗');
+    const overlay = document.getElementById('previewOverlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+    }
+    
+    // 移除键盘事件监听
+    document.removeEventListener('keydown', handlePreviewKeyboard);
+}
+
+// 上一张图片
+function prevImage() {
+    currentPreviewIndex = (currentPreviewIndex - 1 + previewImages.length) % previewImages.length;
+    updatePreviewImage();
+}
+
+// 下一张图片
+function nextImage() {
+    currentPreviewIndex = (currentPreviewIndex + 1) % previewImages.length;
+    updatePreviewImage();
+}
+
+// 更新预览图片
+function updatePreviewImage() {
+    const previewImage = document.getElementById('previewImage');
+    const currentImageSpan = document.getElementById('currentImage');
+    
+    if (!previewImage || !currentImageSpan) return;
+    
+    // 添加淡入淡出效果
+    previewImage.style.opacity = '0';
+    
+    setTimeout(() => {
+        previewImage.src = previewImages[currentPreviewIndex];
+        currentImageSpan.textContent = currentPreviewIndex + 1;
+        previewImage.style.opacity = '1';
+        
+        // 更新缩略图激活状态
+        updateThumbnailActive();
+    }, 200);
+}
+
+// 生成缩略图
+function generateThumbnails() {
+    const thumbnailsContainer = document.getElementById('previewThumbnails');
+    if (!thumbnailsContainer) return;
+    
+    thumbnailsContainer.innerHTML = '';
+    
+    previewImages.forEach((image, index) => {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = image;
+        thumbnail.alt = `预览图${index + 1}`;
+        thumbnail.className = 'preview-thumbnail' + (index === 0 ? ' active' : '');
+        thumbnail.dataset.index = index;
+        thumbnail.onclick = () => selectThumbnail(index);
+        
+        thumbnailsContainer.appendChild(thumbnail);
+    });
+}
+
+// 选择缩略图
+function selectThumbnail(index) {
+    currentPreviewIndex = index;
+    updatePreviewImage();
+}
+
+// 更新缩略图激活状态
+function updateThumbnailActive() {
+    const thumbnails = document.querySelectorAll('.preview-thumbnail');
+    thumbnails.forEach((thumbnail, index) => {
+        if (index === currentPreviewIndex) {
+            thumbnail.classList.add('active');
+        } else {
+            thumbnail.classList.remove('active');
+        }
+    });
+}
+
+// 处理键盘事件
+function handlePreviewKeyboard(event) {
+    if (event.key === 'ArrowLeft') {
+        prevImage();
+    } else if (event.key === 'ArrowRight') {
+        nextImage();
+    } else if (event.key === 'Escape') {
+        closePreview();
+    }
+}
+
+// 添加触摸滑动支持
+function addTouchSupport() {
+    const previewContent = document.querySelector('.preview-content');
+    if (!previewContent) return;
+    
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    previewContent.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    previewContent.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // 向左滑动，显示下一张
+                nextImage();
+            } else {
+                // 向右滑动，显示上一张
+                prevImage();
+            }
+        }
+    }
+}
+
+// 点击弹窗背景关闭
+document.addEventListener('DOMContentLoaded', function() {
+    const previewOverlay = document.getElementById('previewOverlay');
+    if (previewOverlay) {
+        previewOverlay.addEventListener('click', function(e) {
+            if (e.target === previewOverlay) {
+                closePreview();
+            }
+        });
+    }
+});
