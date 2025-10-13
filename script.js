@@ -819,7 +819,7 @@ document.head.appendChild(style);
 
 // 复制QQ号功能
 function copyQQ() {
-    const qqNumber = '3472132884';
+    const qqNumber = '3397948399';
     
     // 尝试使用现代API复制到剪贴板
     if (navigator.clipboard && window.isSecureContext) {
@@ -1289,7 +1289,7 @@ function addImageMessage(imageSrc, fileName) {
         botMessage.innerHTML = `
             <div class="message-avatar">🤖</div>
             <div class="message-content">
-                您的支付已收到，请添加QQ客服：<span class="qq-number">3139330983</span>
+                您的支付已收到，请添加QQ客服：<span class="qq-number">3397948399</span>
             </div>
         `;
         messagesContainer.appendChild(botMessage);
