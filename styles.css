@@ -3011,3 +3011,24 @@ body::before {
         will-change: contents;
     }
 }
+
+/* 图片优化 */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* 懒加载优化 */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* 预加载关键资源 */
+.main-img, .qr-image {
+    will-change: transform;
+}

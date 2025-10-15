@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 预加载关键图片 -->
+    <link rel="preload" href="beauty-1.jpg" as="image">
+    <link rel="preload" href="beauty-2.jpg" as="image">
+    <link rel="preload" href="WechatIMG363.jpg" as="image">
+    <link rel="preload" href="3591759208694_.pic.jpg" as="image">
 </head>
 <body>
     <!-- 固定客服按钮 -->
@@ -60,7 +66,7 @@
                 <div class="beauty-card">
                     <div class="beauty-gallery">
                         <div class="gallery-main">
-                            <img src="beauty-1.jpg" alt="魅力展示" class="beauty-img main-img">
+                            <img src="beauty-1.jpg" alt="魅力展示" class="beauty-img main-img" loading="eager">
                         </div>
                         <div class="gallery-thumbnails">
                             <img src="beauty-1.jpg" alt="图片1" class="thumbnail active" data-index="0">
