@@ -252,8 +252,8 @@ body::before {
 }
 
 .main-img {
-    width: 320px;
-    height: 320px;
+    width: 450px;
+    height: 450px;
     border-radius: 20px;
     object-fit: cover;
     box-shadow: 0 8px 30px rgba(233, 30, 99, 0.5);
@@ -2590,13 +2590,13 @@ body::before {
     }
     
     .main-img {
-        width: 280px;
-        height: 280px;
+        width: 380px;
+        height: 380px;
     }
     
     .thumbnail {
-        width: 60px;
-        height: 60px;
+        width: 65px;
+        height: 65px;
     }
     
     .vip-badge {
@@ -2902,13 +2902,13 @@ body::before {
     }
     
     .main-img {
-        width: 220px;
-        height: 220px;
+        width: 320px;
+        height: 320px;
     }
     
     .thumbnail {
-        width: 50px;
-        height: 50px;
+        width: 55px;
+        height: 55px;
     }
     
     .vip-badge {
@@ -2989,13 +2989,13 @@ body::before {
     }
     
     .main-img {
-        width: 200px;
-        height: 200px;
+        width: 280px;
+        height: 280px;
     }
     
     .thumbnail {
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
     }
     
     .vip-badge {
