@@ -90,7 +90,7 @@
     }
     50% {
         box-shadow: 0 4px 25px rgba(76, 175, 80, 0.8);
-        transform: scale(1.05);
+        /* transform: scale(1.05); */
     }
     100% {
         box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
@@ -113,6 +113,90 @@ body.popup-open {
     position: fixed;
     width: 100%;
     height: 100%;
+}
+
+/* 全局禁用所有弹窗的transform动画 - 防止跳变 */
+.popup-overlay,
+.service-overlay,
+.vip-popup-overlay,
+.timed-popup-overlay,
+.exit-intent-overlay,
+.preview-overlay {
+    transform: none !important;
+    transition: opacity 0.3s ease !important;
+}
+
+.popup-overlay .popup-content,
+.service-overlay .service-popup,
+.vip-popup-overlay .vip-popup,
+.timed-popup-overlay .timed-popup,
+.exit-intent-overlay .exit-intent-popup,
+.preview-overlay .preview-modal {
+    transform: none !important;
+    transition: none !important;
+}
+
+.popup-overlay.show,
+.service-overlay.show,
+.vip-popup-overlay.show,
+.timed-popup-overlay.show,
+.exit-intent-overlay.show,
+.preview-overlay.show {
+    transform: none !important;
+}
+
+.popup-overlay.show .popup-content,
+.service-overlay.show .service-popup,
+.vip-popup-overlay.show .vip-popup,
+.timed-popup-overlay.show .timed-popup,
+.exit-intent-overlay.show .exit-intent-popup,
+.preview-overlay.show .preview-modal {
+    transform: none !important;
+}
+
+/* 手机端完全禁用所有可能导致跳变的动画 */
+@media (max-width: 768px) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    /* 只保留必要的opacity过渡 */
+    .popup-overlay,
+    .service-overlay,
+    .vip-popup-overlay,
+    .timed-popup-overlay,
+    .exit-intent-overlay,
+    .preview-overlay {
+        transition: opacity 0.3s ease !important;
+    }
+    
+    /* 禁用所有transform动画 */
+    .main-img,
+    .thumbnail,
+    .vip-badge,
+    .amount-btn,
+    .service-btn,
+    .timed-discount,
+    .stats-number,
+    .step-icon,
+    .fire-icon,
+    .status-indicator i,
+    .badge-text,
+    .urgency-text {
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    /* 禁用hover效果 */
+    .main-img:hover,
+    .thumbnail:hover,
+    .vip-badge:hover,
+    .amount-btn:hover,
+    .service-btn:hover {
+        transform: none !important;
+        animation: none !important;
+    }
 }
 
 /* 添加动态背景效果 */
@@ -170,14 +254,14 @@ body::before {
     border-radius: 25px;
     text-align: center;
     margin-bottom: 15px;
-    animation: pulse 2s infinite;
+    /* animation: pulse 2s infinite; */
     box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
 }
 
 .fire-icon {
     font-size: 1.2rem;
     margin-right: 8px;
-    animation: bounce 1s infinite;
+    /* animation: bounce 1s infinite; */
 }
 
 .urgency-text {
@@ -311,7 +395,7 @@ body::before {
 }
 
 .main-img:hover {
-    transform: scale(1.08) rotate(1deg);
+    /* transform: scale(1.08) rotate(1deg); */
     box-shadow: 0 12px 40px rgba(233, 30, 99, 0.6);
     border-color: #ff4081;
 }
@@ -344,7 +428,7 @@ body::before {
 }
 
 .thumbnail:hover {
-    transform: scale(1.15) rotate(2deg);
+    /* transform: scale(1.15) rotate(2deg); */
     opacity: 1;
     border-color: #ff4081;
     box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
@@ -354,8 +438,8 @@ body::before {
     border-color: #ff4081;
     opacity: 1;
     box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
-    transform: scale(1.15) rotate(2deg);
-    animation: pulse-thumbnail 2s infinite;
+    /* transform: scale(1.15) rotate(2deg); */
+    /* animation: pulse-thumbnail 2s infinite; */
 }
 
 @keyframes pulse-thumbnail {
@@ -392,9 +476,9 @@ body::before {
 }
 
 .vip-badge:hover {
-    transform: scale(1.1) rotate(-2deg);
+    /* transform: scale(1.1) rotate(-2deg); */
     box-shadow: 0 6px 25px rgba(255, 215, 0, 0.8);
-    animation: vip-bounce 0.6s ease-in-out;
+    /* animation: vip-bounce 0.6s ease-in-out; */
 }
 
 .vip-crown {
@@ -427,20 +511,20 @@ body::before {
 @keyframes vip-glow {
     0% {
         box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
-        transform: scale(1);
+        /* transform: scale(1); */
     }
     100% {
         box-shadow: 0 6px 20px rgba(255, 215, 0, 0.9);
-        transform: scale(1.02);
+        /* transform: scale(1.02); */
     }
 }
 
 @keyframes vip-bounce {
     0%, 100% {
-        transform: scale(1.1) rotate(-2deg);
+        /* transform: scale(1.1) rotate(-2deg); */
     }
     50% {
-        transform: scale(1.2) rotate(-4deg);
+        /* transform: scale(1.2) rotate(-4deg); */
     }
 }
 
@@ -495,14 +579,14 @@ body::before {
     max-width: 400px;
     width: 90%;
     box-shadow: 0 20px 40px rgba(255, 215, 0, 0.4);
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 3px solid #FFD700;
     overflow: hidden;
 }
 
 .vip-popup-overlay.show .vip-popup {
-    transform: scale(1);
+    /* transform: scale(1); */
 }
 
 .vip-popup-header {
@@ -540,7 +624,7 @@ body::before {
 
 .vip-close:hover {
     background: rgba(255, 215, 0, 0.2);
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
 }
 
 .vip-popup-content {
@@ -931,7 +1015,7 @@ body::before {
     font-size: 0.8rem;
     font-weight: 600;
     box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
-    animation: bounce 2s infinite;
+    /* animation: bounce 2s infinite; */
 }
 
 .badge-text {
@@ -1213,7 +1297,7 @@ body::before {
 
 .status-indicator i {
     color: #ffa726;
-    animation: pulse 2s infinite;
+    /* animation: pulse 2s infinite; */
 }
 
 @keyframes pulse {
@@ -1566,7 +1650,7 @@ body::before {
 
 .step.active {
     opacity: 1;
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
 }
 
 .step-number {
@@ -1712,12 +1796,12 @@ body::before {
     display: flex;
     flex-direction: column;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
     transition: transform 0.3s ease;
 }
 
 .service-overlay.show .service-popup {
-    transform: scale(1);
+    /* transform: scale(1); */
 }
 
 .service-header {
@@ -1842,7 +1926,7 @@ body::before {
     display: inline-block;
     margin: 0 2px;
     box-shadow: 0 2px 4px rgba(255, 107, 157, 0.3);
-    animation: pulse 2s infinite;
+    /* animation: pulse 2s infinite; */
 }
 
 .service-input {
@@ -1889,7 +1973,7 @@ body::before {
     text-align: center;
     margin: 15px 0;
     box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-    animation: pulse 2s infinite;
+    /* animation: pulse 2s infinite; */
 }
 
 .timer-label {
@@ -1959,7 +2043,7 @@ body::before {
 .stats-number {
     font-weight: bold;
     color: #ffeb3b;
-    animation: pulse 2s infinite;
+    /* animation: pulse 2s infinite; */
 }
 
 /* 离开页面挽留弹窗 */
@@ -1990,12 +2074,12 @@ body::before {
     max-width: 400px;
     width: 90%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
     transition: transform 0.3s ease;
 }
 
 .exit-intent-overlay.show .exit-intent-popup {
-    transform: scale(1);
+    /* transform: scale(1); */
 }
 
 .exit-header {
@@ -2138,12 +2222,12 @@ body::before {
     max-width: 350px;
     width: 90%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
     transition: transform 0.3s ease;
 }
 
 .timed-popup-overlay.show .timed-popup {
-    transform: scale(1);
+    /* transform: scale(1); */
 }
 
 .timed-header {
@@ -2345,7 +2429,7 @@ body::before {
     width: 90%;
     max-height: 90vh;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
     transition: transform 0.3s ease;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -2353,7 +2437,7 @@ body::before {
 }
 
 .popup-overlay.show .popup-content {
-    transform: scale(1);
+    /* transform: scale(1); */
 }
 
 .popup-qr {
@@ -2400,7 +2484,7 @@ body::before {
     background: linear-gradient(135deg, #ff6b9d, #ff8fab);
     color: white;
     font-weight: bold;
-    animation: pulse 2s infinite;
+    /* animation: pulse 2s infinite; */
 }
 
 .step-icon {
@@ -3151,9 +3235,30 @@ body::before {
         position: relative;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        transition: none !important;
     }
     
     .popup-overlay.show .popup-content {
+        transform: none !important;
+    }
+    
+    /* 禁用所有弹窗的缩放动画 */
+    .popup-overlay .popup-content,
+    .service-overlay .service-popup,
+    .vip-popup-overlay .vip-popup,
+    .timed-popup-overlay .timed-popup,
+    .exit-intent-overlay .exit-intent-popup,
+    .preview-overlay .preview-modal {
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    .popup-overlay.show .popup-content,
+    .service-overlay.show .service-popup,
+    .vip-popup-overlay.show .vip-popup,
+    .timed-popup-overlay.show .timed-popup,
+    .exit-intent-overlay.show .exit-intent-popup,
+    .preview-overlay.show .preview-modal {
         transform: none !important;
     }
     
@@ -3230,12 +3335,12 @@ body::before {
     display: flex;
     flex-direction: column;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    transform: scale(0.8);
+    /* transform: scale(0.8); */
     transition: transform 0.3s ease;
 }
 
 .preview-overlay.show .preview-modal {
-    transform: scale(1);
+    /* transform: scale(1); */
 }
 
 .preview-header {
@@ -3331,12 +3436,12 @@ body::before {
 
 .preview-nav:hover {
     background: white;
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .preview-nav:active {
-    transform: scale(0.95);
+    /* transform: scale(0.95); */
 }
 
 .preview-nav.prev {
@@ -3373,7 +3478,7 @@ body::before {
 }
 
 .preview-thumbnail:hover {
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
     border-color: #667eea;
 }
 
@@ -3424,9 +3529,30 @@ body::before {
         padding: 15px;
         transform: none !important;
         margin: 0;
+        transition: none !important;
     }
     
     .popup-overlay.show .popup-content {
+        transform: none !important;
+    }
+    
+    /* 小屏幕也禁用所有弹窗动画 */
+    .popup-overlay .popup-content,
+    .service-overlay .service-popup,
+    .vip-popup-overlay .vip-popup,
+    .timed-popup-overlay .timed-popup,
+    .exit-intent-overlay .exit-intent-popup,
+    .preview-overlay .preview-modal {
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    .popup-overlay.show .popup-content,
+    .service-overlay.show .service-popup,
+    .vip-popup-overlay.show .vip-popup,
+    .timed-popup-overlay.show .timed-popup,
+    .exit-intent-overlay.show .exit-intent-popup,
+    .preview-overlay.show .preview-modal {
         transform: none !important;
     }
     
@@ -3448,7 +3574,7 @@ body::before {
     }
     
     .amount-btn:active {
-        transform: scale(0.98);
+        /* transform: scale(0.98); */
     }
     
     /* 优化滚动性能 */

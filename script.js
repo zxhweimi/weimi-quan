@@ -35,11 +35,11 @@ function initFixedCustomerService() {
     fixedServiceBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
-        // 添加点击动画
-        this.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            this.style.transform = '';
-        }, 150);
+        // 移除点击动画，防止跳变
+        // this.style.transform = 'scale(0.95)';
+        // setTimeout(() => {
+        //     this.style.transform = '';
+        // }, 150);
         
         // 调用客服功能
         openCustomerService();
@@ -47,21 +47,22 @@ function initFixedCustomerService() {
     
     // 添加悬停效果
     fixedServiceBtn.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px) scale(1.05)';
+        // 移除悬停动画，防止跳变
+        // this.style.transform = 'translateY(-2px) scale(1.05)';
     });
     
     fixedServiceBtn.addEventListener('mouseleave', function() {
         this.style.transform = '';
     });
     
-    // 添加呼吸动画效果
-    setInterval(() => {
-        if (!document.querySelector('.service-overlay')) {
-            fixedServiceBtn.style.animation = 'pulse 2s infinite';
-        } else {
-            fixedServiceBtn.style.animation = '';
-        }
-    }, 3000);
+    // 移除呼吸动画效果，防止跳变
+    // setInterval(() => {
+    //     if (!document.querySelector('.service-overlay')) {
+    //         fixedServiceBtn.style.animation = 'pulse 2s infinite';
+    //     } else {
+    //         fixedServiceBtn.style.animation = '';
+    //     }
+    // }, 3000);
     
     console.log('固定客服按钮初始化完成');
 }
@@ -448,13 +449,14 @@ function updateMainQRCode(amount) {
         console.log('主页面二维码已更新为：', qrSrc);
         
         // 添加视觉反馈
-        qrImage.style.transform = 'scale(1.05)';
+        // 移除缩放动画，防止跳变
+        // qrImage.style.transform = 'scale(1.05)';
         qrImage.style.boxShadow = '0 4px 15px rgba(233, 30, 99, 0.4)';
         
-        setTimeout(() => {
-            qrImage.style.transform = 'scale(1)';
-            qrImage.style.boxShadow = '0 2px 8px rgba(255, 182, 193, 0.3)';
-        }, 300);
+        // setTimeout(() => {
+        //     qrImage.style.transform = 'none';
+        //     qrImage.style.boxShadow = '0 2px 8px rgba(255, 182, 193, 0.3)';
+        // }, 300);
     };
     img.src = qrSrc;
 }
@@ -699,11 +701,13 @@ function addCardHoverEffects() {
     
     cards.forEach(card => {
         card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px) scale(1.02)';
+            // 移除悬停动画，防止跳变
+            // this.style.transform = 'translateY(-5px) scale(1.02)';
         });
         
         card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
+            // 移除悬停动画，防止跳变
+            // this.style.transform = 'translateY(0) none';
         });
     });
 }
@@ -730,10 +734,11 @@ function addExtraFeatures() {
     const qrImage = document.querySelector('.qr-image');
     if (qrImage) {
         qrImage.addEventListener('click', function() {
-            this.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 300);
+            // 移除缩放动画，防止跳变
+            // this.style.transform = 'scale(1.2)';
+            // setTimeout(() => {
+            //     this.style.transform = 'none';
+            // }, 300);
         });
     }
     
@@ -765,14 +770,14 @@ function addExtraFeatures() {
                 thumbnails.forEach(thumb => thumb.classList.remove('active'));
                 this.classList.add('active');
                 
-                // 添加切换动画
-                mainImg.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    mainImg.style.transform = 'scale(1.05)';
-                    setTimeout(() => {
-                        mainImg.style.transform = 'scale(1)';
-                    }, 150);
-                }, 150);
+                // 移除切换动画，防止跳变
+                // mainImg.style.transform = 'scale(0.95)';
+                // setTimeout(() => {
+                //     mainImg.style.transform = 'scale(1.05)';
+                //     setTimeout(() => {
+                //         mainImg.style.transform = 'none';
+                //     }, 150);
+                // }, 150);
             });
         });
         
@@ -785,14 +790,14 @@ function addExtraFeatures() {
             thumbnails.forEach(thumb => thumb.classList.remove('active'));
             thumbnails[currentIndex].classList.add('active');
             
-            // 添加切换动画
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
-            }, 150);
+            // 移除切换动画，防止跳变
+            // this.style.transform = 'scale(0.95)';
+            // setTimeout(() => {
+            //     this.style.transform = 'scale(1.05)';
+            //     setTimeout(() => {
+            //         this.style.transform = 'none';
+            //     }, 150);
+            // }, 150);
         });
         
         // 自动轮播（每5秒切换一次）
@@ -811,11 +816,11 @@ function addExtraFeatures() {
 const style = document.createElement('style');
 style.textContent = `
     @keyframes heartbeat {
-        0% { transform: scale(1); }
+        0% { transform: none; }
         25% { transform: scale(1.1); }
         50% { transform: scale(1.05); }
         75% { transform: scale(1.1); }
-        100% { transform: scale(1); }
+        100% { transform: none; }
     }
     
     .amount-btn.active {
@@ -1129,13 +1134,15 @@ document.addEventListener('keydown', function(e) {
 if ('ontouchstart' in window) {
     document.addEventListener('touchstart', function(e) {
         if (e.target.classList.contains('amount-btn')) {
-            e.target.style.transform = 'scale(0.95)';
+            // 移除触摸动画，防止跳变
+            // e.target.style.transform = 'scale(0.95)';
         }
     });
     
     document.addEventListener('touchend', function(e) {
         if (e.target.classList.contains('amount-btn')) {
-            e.target.style.transform = '';
+            // 移除触摸动画，防止跳变
+            // e.target.style.transform = '';
         }
     });
 }
@@ -1247,11 +1254,11 @@ function openCustomerService() {
     setTimeout(() => {
         serviceOverlay.classList.add('show');
         serviceOverlay.style.opacity = '0';
-        serviceOverlay.style.transform = 'scale(0.8)';
+        serviceOverlay.style.transform = 'none';
         
         setTimeout(() => {
             serviceOverlay.style.opacity = '1';
-            serviceOverlay.style.transform = 'scale(1)';
+            serviceOverlay.style.transform = 'none';
         }, 50);
     }, 10);
 }
@@ -1261,7 +1268,8 @@ function closeService() {
     const serviceOverlay = document.querySelector('.service-overlay');
     if (serviceOverlay) {
         serviceOverlay.style.opacity = '0';
-        serviceOverlay.style.transform = 'scale(0.8)';
+        // 移除transform设置，避免跳变
+        serviceOverlay.style.transform = 'none';
         
         setTimeout(() => {
             serviceOverlay.remove();
@@ -1408,12 +1416,12 @@ function showExitIntent() {
         exitIntentShown = true;
         overlay.classList.add('show');
         overlay.style.opacity = '0';
-        overlay.style.transform = 'scale(0.8)';
+        overlay.style.transform = 'none';
         
-        // 添加显示动画
+        // 移除显示动画，防止跳变
         setTimeout(() => {
             overlay.style.opacity = '1';
-            overlay.style.transform = 'scale(1)';
+            overlay.style.transform = 'none';
         }, 50);
     }
 }
@@ -1423,7 +1431,7 @@ function closeExitIntent() {
     const overlay = document.getElementById('exitIntentOverlay');
     if (overlay) {
         overlay.style.opacity = '0';
-        overlay.style.transform = 'scale(0.8)';
+        overlay.style.transform = 'none';
         
         setTimeout(() => {
             overlay.classList.remove('show');
@@ -1496,12 +1504,12 @@ function showTimedPopup() {
             timedPopupShown = true;
             overlay.classList.add('show');
             overlay.style.opacity = '0';
-            overlay.style.transform = 'scale(0.8)';
+            overlay.style.transform = 'none';
             
             // 添加显示动画
             setTimeout(() => {
                 overlay.style.opacity = '1';
-                overlay.style.transform = 'scale(1)';
+                overlay.style.transform = 'none';
                 startTimedCountdown();
             }, 50);
         }
@@ -1513,7 +1521,7 @@ function closeTimedPopup() {
     const overlay = document.getElementById('timedPopupOverlay');
     if (overlay) {
         overlay.style.opacity = '0';
-        overlay.style.transform = 'scale(0.8)';
+        overlay.style.transform = 'none';
         
         setTimeout(() => {
             overlay.classList.remove('show');
@@ -1747,7 +1755,8 @@ function animateSocialProof() {
     
     stats.forEach((stat, index) => {
         setTimeout(() => {
-            stat.style.animation = 'bounce 0.6s ease-in-out';
+            // 移除动画，防止跳变
+            // stat.style.animation = 'bounce 0.6s ease-in-out';
             setTimeout(() => {
                 stat.style.animation = '';
             }, 600);
@@ -1761,11 +1770,11 @@ function enhanceButtonClicks() {
     
     buttons.forEach(button => {
         button.addEventListener('click', function() {
-            // 添加点击动画
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
+            // 移除点击动画，防止跳变
+            // this.style.transform = 'scale(0.95)';
+            // setTimeout(() => {
+            //     this.style.transform = '';
+            // }, 150);
             
         });
     });
@@ -2206,8 +2215,9 @@ function startMarketingGuidance() {
 function highlightRecommendedPackage() {
     const bestValueBtn = document.querySelector('.amount-btn.best-value');
     if (bestValueBtn) {
-        bestValueBtn.style.animation = 'pulse 2s infinite';
-        bestValueBtn.style.transform = 'scale(1.05)';
+        // 移除动画，防止跳变
+        // bestValueBtn.style.animation = 'pulse 2s infinite';
+        // bestValueBtn.style.transform = 'scale(1.05)';
     }
 }
 
@@ -2383,7 +2393,7 @@ function showScarcityAlert() {
             text-align: center;
             z-index: 10000;
             box-shadow: 0 8px 25px rgba(255, 87, 34, 0.4);
-            animation: pulse 1s infinite;
+            /* animation: pulse 1s infinite; */
         ">
             <div style="font-size: 1rem; font-weight: bold;">
                 ⚠️ 名额即将售罄！
@@ -2439,7 +2449,7 @@ function showIdleGuidance() {
             text-align: center;
             z-index: 10000;
             box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
-            animation: bounce 0.6s ease-in-out;
+            /* animation: bounce 0.6s ease-in-out; */
             max-width: 250px;
         ">
             <div style="font-size: 0.9rem; font-weight: bold; margin-bottom: 5px;">
