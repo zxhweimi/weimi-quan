@@ -246,20 +246,61 @@ body::before {
     margin-bottom: 1rem;
 }
 
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
 .main-img {
-    width: 300px;
-    height: 300px;
-    border-radius: 15px;
+    width: 320px;
+    height: 320px;
+    border-radius: 20px;
     object-fit: cover;
-    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
-    border: 3px solid #ffb6c1;
-    transition: all 0.3s ease;
+    box-shadow: 0 8px 30px rgba(233, 30, 99, 0.5);
+    border: 4px solid #ff6b9d;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    background-size: 200% 200%;
+    animation: shimmer 2s infinite;
+}
+
+/* 图片加载占位符动画 */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* 图片加载完成后的效果 */
+.main-img.loaded {
+    animation: none;
+    background: none;
+}
+
+/* 图片加载中状态 */
+.main-img:not([src]) {
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-img:not([src])::after {
+    content: "加载中...";
+    color: #999;
+    font-size: 14px;
 }
 
 .main-img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.5);
+    transform: scale(1.08) rotate(1deg);
+    box-shadow: 0 12px 40px rgba(233, 30, 99, 0.6);
+    border-color: #ff4081;
 }
 
 .gallery-thumbnails {
@@ -270,28 +311,324 @@ body::before {
 }
 
 .thumbnail {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
     object-fit: cover;
-    border: 2px solid #ffb6c1;
+    border: 3px solid #ff6b9d;
     cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0.7;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    background-size: 200% 200%;
+    animation: shimmer 2s infinite;
+}
+
+.thumbnail.loaded {
+    animation: none;
+    background: none;
 }
 
 .thumbnail:hover {
-    transform: scale(1.1);
+    transform: scale(1.15) rotate(2deg);
     opacity: 1;
-    border-color: #e91e63;
-    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+    border-color: #ff4081;
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
 }
 
 .thumbnail.active {
-    border-color: #e91e63;
+    border-color: #ff4081;
     opacity: 1;
-    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+    transform: scale(1.15) rotate(2deg);
+    animation: pulse-thumbnail 2s infinite;
+}
+
+@keyframes pulse-thumbnail {
+    0% {
+        box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+    }
+    50% {
+        box-shadow: 0 6px 25px rgba(233, 30, 99, 0.8);
+    }
+    100% {
+        box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+    }
+}
+
+/* VIP徽章样式 */
+.vip-badge {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00);
+    border: 3px solid #FFD700;
+    border-radius: 25px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+    z-index: 10;
+    animation: vip-glow 2s ease-in-out infinite alternate;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 80px;
+    justify-content: center;
+}
+
+.vip-badge:hover {
+    transform: scale(1.1) rotate(-2deg);
+    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.8);
+    animation: vip-bounce 0.6s ease-in-out;
+}
+
+.vip-crown {
+    font-size: 18px;
+    animation: crown-rotate 3s linear infinite;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.vip-text {
+    color: #8B4513;
+    font-weight: 700;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.vip-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: vip-shine 2s ease-in-out infinite;
+    border-radius: 25px;
+}
+
+/* VIP徽章动画 */
+@keyframes vip-glow {
+    0% {
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.9);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes vip-bounce {
+    0%, 100% {
+        transform: scale(1.1) rotate(-2deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(-4deg);
+    }
+}
+
+@keyframes crown-rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    75% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes vip-shine {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* VIP弹窗样式 */
+.vip-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.vip-popup-overlay.show {
+    opacity: 1;
+}
+
+.vip-popup {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 20px;
+    padding: 0;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(255, 215, 0, 0.4);
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid #FFD700;
+    overflow: hidden;
+}
+
+.vip-popup-overlay.show .vip-popup {
+    transform: scale(1);
+}
+
+.vip-popup-header {
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    color: #FFD700;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #FFD700;
+}
+
+.vip-popup-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.vip-close {
+    background: none;
+    border: none;
+    color: #FFD700;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.vip-close:hover {
+    background: rgba(255, 215, 0, 0.2);
     transform: scale(1.1);
+}
+
+.vip-popup-content {
+    padding: 25px;
+    background: linear-gradient(135deg, #FFF8DC, #F5DEB3);
+}
+
+.vip-benefits {
+    margin-bottom: 20px;
+}
+
+.vip-benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 8px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 10px;
+    border-left: 4px solid #FFD700;
+}
+
+.vip-icon {
+    font-size: 18px;
+    width: 25px;
+    text-align: center;
+}
+
+.vip-benefit-text {
+    color: #8B4513;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.vip-price {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 15px;
+    border: 2px solid #FF8C00;
+}
+
+.vip-original-price {
+    color: #8B4513;
+    text-decoration: line-through;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.vip-current-price {
+    color: #8B4513;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.vip-savings {
+    color: #DC143C;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.vip-urgency {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.vip-urgency p {
+    color: #DC143C;
+    font-weight: 600;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.vip-buy-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #DC143C, #B22222);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(220, 20, 60, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.vip-buy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 20, 60, 0.6);
+    background: linear-gradient(135deg, #B22222, #DC143C);
+}
+
+.vip-buy-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(220, 20, 60, 0.4);
 }
 
 .beauty-info h3 {
@@ -2253,13 +2590,28 @@ body::before {
     }
     
     .main-img {
-        width: 250px;
-        height: 250px;
+        width: 280px;
+        height: 280px;
     }
     
     .thumbnail {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
+    }
+    
+    .vip-badge {
+        bottom: 12px;
+        right: 12px;
+        padding: 6px 10px;
+        min-width: 70px;
+    }
+    
+    .vip-crown {
+        font-size: 16px;
+    }
+    
+    .vip-text {
+        font-size: 11px;
     }
     
     .gallery-thumbnails {
@@ -2550,13 +2902,28 @@ body::before {
     }
     
     .main-img {
-        width: 200px;
-        height: 200px;
+        width: 220px;
+        height: 220px;
     }
     
     .thumbnail {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .vip-badge {
+        bottom: 10px;
+        right: 10px;
+        padding: 5px 8px;
+        min-width: 60px;
+    }
+    
+    .vip-crown {
+        font-size: 14px;
+    }
+    
+    .vip-text {
+        font-size: 10px;
     }
     
     .gallery-thumbnails {
@@ -2622,13 +2989,28 @@ body::before {
     }
     
     .main-img {
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
     }
     
     .thumbnail {
-        width: 35px;
-        height: 35px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .vip-badge {
+        bottom: 8px;
+        right: 8px;
+        padding: 4px 6px;
+        min-width: 50px;
+    }
+    
+    .vip-crown {
+        font-size: 12px;
+    }
+    
+    .vip-text {
+        font-size: 9px;
     }
     
     /* 优化统计信息显示 - 超小屏幕 */

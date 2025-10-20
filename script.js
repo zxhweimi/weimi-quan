@@ -741,8 +741,17 @@ function addExtraFeatures() {
     const mainImg = document.querySelector('.main-img');
     const thumbnails = document.querySelectorAll('.thumbnail');
     
+    // VIP徽章点击功能
+    const vipBadge = document.querySelector('.vip-badge');
+    if (vipBadge) {
+        vipBadge.addEventListener('click', function(e) {
+            e.stopPropagation();
+            showVipPopup();
+        });
+    }
+    
     if (mainImg && thumbnails.length > 0) {
-        const images = ['beauty-1.jpg', 'beauty-2.jpg', 'beauty-3.jpg', 'beauty-4.jpg', 'beauty-5.jpg'];
+        const images = ['WechatIMG396.jpg', 'WechatIMG397.jpg', 'WechatIMG395.jpg', 'WechatIMG393.jpg', 'WechatIMG394.jpg'];
         let currentIndex = 0;
         
         // 缩略图点击切换
@@ -2494,15 +2503,95 @@ function showScrollGuidance() {
     }, 3000);
 }
 
+// ==================== VIP功能 ====================
+
+// 显示VIP弹窗
+function showVipPopup() {
+    // 创建VIP弹窗
+    const vipOverlay = document.createElement('div');
+    vipOverlay.className = 'vip-popup-overlay';
+    vipOverlay.innerHTML = `
+        <div class="vip-popup">
+            <div class="vip-popup-header">
+                <h3>👑 终生VIP特权</h3>
+                <button class="vip-close" onclick="closeVipPopup()">×</button>
+            </div>
+            <div class="vip-popup-content">
+                <div class="vip-benefits">
+                    <div class="vip-benefit-item">
+                        <span class="vip-icon">🎯</span>
+                        <span class="vip-benefit-text">专属高清内容</span>
+                    </div>
+                    <div class="vip-benefit-item">
+                        <span class="vip-icon">👑</span>
+                        <span class="vip-benefit-text">终生会员</span>
+                    </div>
+                    <div class="vip-benefit-item">
+                        <span class="vip-icon">⚡</span>
+                        <span class="vip-benefit-text">每日更新</span>
+                    </div>
+                    <div class="vip-benefit-item">
+                        <span class="vip-icon">🔒</span>
+                        <span class="vip-benefit-text">私密安全保护</span>
+                    </div>
+                    <div class="vip-benefit-item">
+                        <span class="vip-icon">💎</span>
+                        <span class="vip-benefit-text">终身免费使用</span>
+                    </div>
+                </div>
+                <div class="vip-price">
+                    <div class="vip-original-price">原价：¥199</div>
+                    <div class="vip-current-price">限时特价：¥28.88</div>
+                    <div class="vip-savings">立省¥170.12！</div>
+                </div>
+                <div class="vip-urgency">
+                    <p>🔥 仅限前100名用户！</p>
+                    <p>⏰ 活动即将结束，立即抢购！</p>
+                </div>
+                <button class="vip-buy-btn" onclick="selectPackageAndClose(28.88, '终生VIP套餐')">购买永久vip</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(vipOverlay);
+    
+    // 添加动画效果
+    setTimeout(() => {
+        vipOverlay.classList.add('show');
+    }, 10);
+}
+
+// 关闭VIP弹窗
+function closeVipPopup() {
+    const vipOverlay = document.querySelector('.vip-popup-overlay');
+    if (vipOverlay) {
+        vipOverlay.classList.remove('show');
+        setTimeout(() => {
+            vipOverlay.remove();
+        }, 300);
+    }
+}
+
+// 选择套餐并关闭VIP弹窗
+function selectPackageAndClose(amount, packageName) {
+    // 先关闭VIP弹窗
+    closeVipPopup();
+    
+    // 延迟一点时间确保弹窗关闭，然后选择套餐
+    setTimeout(() => {
+        selectPackage(amount, packageName);
+    }, 350);
+}
+
 // ==================== 预览功能 ====================
 
 // 预览图片数组
 const previewImages = [
-    'Screenshot_20251012_230501_com_hihonor_baidu_brow(1).jpg',  // 原第4张
-    'Screenshot_20251013_111743_com_hihonor_baidu_brow(1).jpg',  // 原第5张
-    'Screenshot_20251012_141433_com_hihonor_baidu_brow.jpg',     // 原第3张(位置不变)
-    'Screenshot_20251012_125915_com_tfkjlll_cvc898bice.jpg',     // 原第1张
-    'Screenshot_20251012_134041_com_btrbrb_ttcb78787ce.jpg'      // 原第2张
+    'WechatIMG396.jpg',  // 第1张
+    'WechatIMG397.jpg',  // 第2张
+    'WechatIMG395.jpg',  // 第3张
+    'WechatIMG393.jpg',  // 第4张
+    'WechatIMG394.jpg'   // 第5张
 ];
 
 let currentPreviewIndex = 0;
@@ -2681,4 +2770,149 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+});
+
+// ==================== 图片加载优化 ====================
+
+// 图片优化初始化
+function initImageOptimization() {
+    console.log('开始初始化图片优化...');
+    
+    // 优化主图片加载
+    optimizeMainImages();
+    
+    // 优化缩略图加载
+    optimizeThumbnails();
+    
+    // 优化二维码图片加载
+    optimizeQRImages();
+    
+    // 添加图片加载监听器
+    addImageLoadListeners();
+    
+    // 预加载关键图片
+    preloadCriticalImages();
+    
+    console.log('图片优化初始化完成');
+}
+
+// 优化主图片加载
+function optimizeMainImages() {
+    const mainImg = document.querySelector('.main-img');
+    if (mainImg) {
+        // 添加加载完成监听器
+        mainImg.addEventListener('load', function() {
+            this.classList.add('loaded');
+            console.log('主图片加载完成');
+        });
+        
+        // 添加加载错误处理
+        mainImg.addEventListener('error', function() {
+            console.error('主图片加载失败');
+            this.style.background = 'linear-gradient(135deg, #ff6b6b, #ff8e8e)';
+        });
+    }
+}
+
+// 优化缩略图加载
+function optimizeThumbnails() {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    thumbnails.forEach((thumbnail, index) => {
+        // 添加加载完成监听器
+        thumbnail.addEventListener('load', function() {
+            this.classList.add('loaded');
+            console.log(`缩略图${index + 1}加载完成`);
+        });
+        
+        // 添加加载错误处理
+        thumbnail.addEventListener('error', function() {
+            console.error(`缩略图${index + 1}加载失败`);
+            this.style.background = 'linear-gradient(135deg, #ff6b6b, #ff8e8e)';
+        });
+    });
+}
+
+// 优化二维码图片加载
+function optimizeQRImages() {
+    const qrImages = document.querySelectorAll('.qr-image');
+    qrImages.forEach((qrImg, index) => {
+        qrImg.addEventListener('load', function() {
+            console.log(`二维码图片${index + 1}加载完成`);
+        });
+        
+        qrImg.addEventListener('error', function() {
+            console.error(`二维码图片${index + 1}加载失败`);
+        });
+    });
+}
+
+// 添加图片加载监听器
+function addImageLoadListeners() {
+    // 监听所有图片的加载状态
+    const allImages = document.querySelectorAll('img');
+    allImages.forEach((img, index) => {
+        // 如果图片已经加载完成
+        if (img.complete && img.naturalHeight !== 0) {
+            img.classList.add('loaded');
+        } else {
+            // 添加加载监听器
+            img.addEventListener('load', function() {
+                this.classList.add('loaded');
+            });
+            
+            img.addEventListener('error', function() {
+                console.error(`图片${index + 1}加载失败:`, this.src);
+                this.style.background = 'linear-gradient(135deg, #ff6b6b, #ff8e8e)';
+            });
+        }
+    });
+}
+
+// 预加载关键图片
+function preloadCriticalImages() {
+    const criticalImages = [
+        'WechatIMG396.jpg',  // 主图片
+        'WechatIMG363.jpg',  // 默认二维码
+        '3591759208694_.pic.jpg'  // 默认支付二维码
+    ];
+    
+    criticalImages.forEach((src, index) => {
+        const img = new Image();
+        img.onload = function() {
+            console.log(`关键图片${index + 1}预加载完成:`, src);
+        };
+        img.onerror = function() {
+            console.error(`关键图片${index + 1}预加载失败:`, src);
+        };
+        img.src = src;
+    });
+}
+
+// 智能预加载 - 当用户悬停在缩略图上时预加载对应图片
+function smartPreload() {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const images = ['WechatIMG396.jpg', 'WechatIMG397.jpg', 'WechatIMG395.jpg', 'WechatIMG393.jpg', 'WechatIMG394.jpg'];
+    
+    thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('mouseenter', function() {
+            // 预加载对应的主图片
+            const img = new Image();
+            img.src = images[index];
+            console.log(`智能预加载图片:`, images[index]);
+        });
+    });
+}
+
+// 图片压缩和格式优化建议
+function optimizeImageFormats() {
+    // 这里可以添加图片格式检测和优化建议
+    console.log('建议将图片转换为WebP格式以获得更好的压缩比');
+    console.log('建议添加不同尺寸的图片以适配不同设备');
+}
+
+// 初始化图片优化
+document.addEventListener('DOMContentLoaded', function() {
+    initImageOptimization();
+    smartPreload();
+    optimizeImageFormats();
 });
