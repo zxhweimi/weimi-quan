@@ -197,6 +197,16 @@ body.popup-open {
         transform: none !important;
         animation: none !important;
     }
+    
+    /* 手机端VIP按钮优化 */
+    .vip-buy-btn {
+        padding: 22px;
+        font-size: 24px;
+        border-radius: 30px;
+        min-height: 65px;
+        letter-spacing: 1.5px;
+        line-height: 1.2;
+    }
 }
 
 /* 添加动态背景效果 */
@@ -706,15 +716,17 @@ body::before {
     background: linear-gradient(135deg, #DC143C, #B22222);
     color: white;
     border: none;
-    padding: 15px;
-    border-radius: 25px;
-    font-size: 18px;
+    padding: 25px;
+    border-radius: 35px;
+    font-size: 26px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(220, 20, 60, 0.4);
+    box-shadow: 0 8px 25px rgba(220, 20, 60, 0.6);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    min-height: 70px;
+    line-height: 1.2;
 }
 
 .vip-buy-btn:hover {
@@ -2423,7 +2435,7 @@ body::before {
 .popup-content {
     background: white;
     border-radius: 20px;
-    padding: 15px;
+    padding: 8px;
     text-align: center;
     max-width: 350px;
     width: 90%;
@@ -2443,7 +2455,7 @@ body::before {
 .popup-qr {
     width: 180px;
     height: auto;
-    margin: 10px auto;
+    margin: 5px auto;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     object-fit: contain;
@@ -2453,12 +2465,12 @@ body::before {
     font-size: 24px;
     font-weight: bold;
     color: #ff6b9d;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .popup-instructions {
-    margin: 15px 0;
-    padding: 12px;
+    margin: 8px 0;
+    padding: 8px;
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     border-radius: 12px;
     border: 2px solid #ff6b9d;
@@ -3227,11 +3239,11 @@ body::before {
     
     .popup-content {
         border-radius: 15px;
-        max-width: 95%;
-        width: 95%;
+        max-width: 98%;
+        width: 98%;
         max-height: 85vh;
         margin: 0;
-        padding: 10px;
+        padding: 5px;
         transform: none !important;
         position: relative;
         overflow-y: auto;
@@ -3524,10 +3536,10 @@ body::before {
     }
     
     .popup-content {
-        max-width: 95%;
-        width: 95%;
+        max-width: 98%;
+        width: 98%;
         max-height: 90vh;
-        padding: 8px;
+        padding: 3px;
         transform: none !important;
         margin: 0;
         transition: none !important;
