@@ -107,6 +107,14 @@ body {
     overflow-x: hidden;
 }
 
+/* 防止弹窗时页面滚动 */
+body.popup-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
 /* 添加动态背景效果 */
 body::before {
     content: '';
@@ -2309,8 +2317,8 @@ body::before {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
@@ -2319,6 +2327,8 @@ body::before {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 .popup-overlay.show {
@@ -2333,9 +2343,13 @@ body::before {
     text-align: center;
     max-width: 350px;
     width: 90%;
+    max-height: 90vh;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     transform: scale(0.8);
     transition: transform 0.3s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
 }
 
 .popup-overlay.show .popup-content {
@@ -3116,11 +3130,31 @@ body::before {
     
     /* 优化弹窗在移动端的显示 */
     .popup-overlay {
-        padding: 1rem;
+        padding: 0.5rem;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
     
     .popup-content {
         border-radius: 15px;
+        max-width: 95%;
+        width: 95%;
+        max-height: 85vh;
+        margin: 0;
+        padding: 20px;
+        transform: none !important;
+        position: relative;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .popup-overlay.show .popup-content {
+        transform: none !important;
     }
     
     /* 优化按钮间距 */
@@ -3384,7 +3418,16 @@ body::before {
     }
     
     .popup-content {
-        max-width: 80%;
+        max-width: 95%;
+        width: 95%;
+        max-height: 90vh;
+        padding: 15px;
+        transform: none !important;
+        margin: 0;
+    }
+    
+    .popup-overlay.show .popup-content {
+        transform: none !important;
     }
     
     .preview-modal {

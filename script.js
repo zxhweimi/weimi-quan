@@ -828,7 +828,7 @@ document.head.appendChild(style);
 
 // 复制QQ号功能
 function copyQQ() {
-    const qqNumber = '1441514586';
+    const qqNumber = '2458479270';
     
     // 尝试使用现代API复制到剪贴板
     if (navigator.clipboard && window.isSecureContext) {
@@ -1171,6 +1171,9 @@ function showQRPopup(amount) {
     };
     img.src = qrSrc;
     
+    // 防止页面滚动
+    document.body.classList.add('popup-open');
+    
     // 立即显示弹窗
     popupOverlay.classList.add('show');
     
@@ -1190,6 +1193,9 @@ function handlePopupClick(e) {
 function closePopup() {
     const popupOverlay = document.getElementById('popupOverlay');
     popupOverlay.classList.remove('show');
+    
+    // 恢复页面滚动
+    document.body.classList.remove('popup-open');
 }
 
 // 打开客服功能（优化版）
@@ -1298,7 +1304,7 @@ function addImageMessage(imageSrc, fileName) {
         botMessage.innerHTML = `
             <div class="message-avatar">🤖</div>
             <div class="message-content">
-                您的支付已收到，请添加QQ客服：<span class="qq-number">1441514586</span>
+                您的支付已收到，请添加QQ客服：<span class="qq-number">2458479270</span>
             </div>
         `;
         messagesContainer.appendChild(botMessage);
